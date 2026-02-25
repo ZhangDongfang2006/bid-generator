@@ -327,119 +327,14 @@ else:
                         show_cert_images=True
                     )
                     st.success("✅ 投标文件生成成功！")
-                    st.session_state.bid_generated = True
-                else:
-                    # 生成单一文件
-                    # 更新生成器使用新的图片大小
-                    generator = BidGenerator(templates_dir, output_dir, image_width_inches=image_width)
+                # 添加下载按钮
+                st.markdown("---")
+                st.markdown("### 📥 下载投标文件")
+                
+                # 查找生成的文件
+                output_dir = Path("output")
+                if output_dir.exists():
+                    files = list(output_dir.glob("*.docx"))
                     
-                    output_path = generator.generate_bid(
-                        st.session_state.tender_info,
-                        config.COMPANY_INFO,
-                        matched_data,
-                        show_cert_images=True
-                    )
-                    st.success("✅ 投标文件生成成功！")
-                    st.session_state.bid_generated = True
-                
-                # 显示下载链接
-                if separate_bids:
-                    col1, col2 = st.columns(2)
-                    
-                    with col1:
-                        if output_paths and 'tech' in output_paths:
-                            tech_bid_path = output_paths['tech']
-                            with open(tech_bid_path, 'rb') as f:
-                                st.download_button(
-                                    label="📥 下载技术标",
-                                    data=f,
-                                    file_name=f"技术标_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx",
-                                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                )
-                    
-                    with col2:
-                        if output_paths and 'commercial' in output_paths:
-                            biz_bid_path = output_paths['commercial']
-                            with open(biz_bid_path, 'rb') as f:
-                                st.download_button(
-                                    label="📥 下载商务标",
-                                    data=f,
-                                    file_name=f"商务标_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx",
-                                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                )
-                else:
-                    if output_path:
-                        with open(output_path, 'rb') as f:
-                            st.download_button(
-                                label="📥 下载投标文件",
-                                data=f,
-                                file_name=f"投标文件_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx",
-                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            )
-                
-            except Exception as e:
-                st.error(f"❌ 生成失败：{e}")
-                st.markdown(f"**错误详情**：{str(e)}")
-    
-    # 第五步：下载投标文件
-    if st.session_state.bid_generated:
-        st.markdown("---")
-        st.header("📥 第五步：下载投标文件")
-        
-        # 显示生成状态
-        st.markdown(f"**生成时间**: {st.session_state.tender_info.get('generate_time', 'N/A')}")
-        
-        # 查找生成的文件
-        output_dir = Path("output")
-        if output_dir.exists():
-            files = list(output_dir.glob("*.docx"))
-            
-            if files:
-                latest_file = max(files, key=lambda f: f.stat().st_mtime)
-                file_size = latest_file.stat().st_size / 1024  # KB
-                
-                # 显示文件信息
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.markdown("**文件名**")
-                    st.code(latest_file.name, language="text")
-                
-                with col2:
-                    st.markdown("**文件大小**")
-                    st.metric("", f"{file_size:.1f} KB")
-                
-                # 下载按钮
-                with open(latest_file, 'rb') as f:
-                    st.download_button(
-                        label="📥 下载最新版本",
-                        data=f,
-                        file_name=latest_file.name,
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    )
-            else:
-                st.warning("⚠️ 没有找到生成的文件")
-    
-    # 底部信息
-    st.markdown("---")
-    st.markdown("---")
-    st.markdown("### ℹ️ 使用说明")
-    st.markdown("""
-    1. 上传招标文件（支持多个文件，PDF/Word）
-    2. 查看AI解析置信度
-    3. 校验提取的需求
-    4. 查看智能匹配结果
-    5. 生成投标文件（包含目录、页码）
-    6. 下载生成的投标文件
-    
-    **新功能说明**：
-    - **目录**：自动生成投标文件目录
-    - **页码**：每页底部自动添加页码
-    - **图片大小**：可调节证书图片大小（3-7 英寸）
-    
-    **注意事项**：
-    - 生成的投标文件为Word格式
-    - 可以在 Microsoft Word 或 WPS 中打开
-    - 建议在提交前人工检查所有内容
-    - 如有问题，请联系技术支持
-    """)
+                    if files:
+                        latest_file = max(files, key=lambda f: f.stat().st_mtime)
