@@ -210,6 +210,124 @@ class BidDocumentGenerator:
             "commercial": commercial_path
         }
 
+    def generate_separate_bids_preview(self, tender_info: Dict, company_info: Dict,
+                                      matched_data: Dict) -> Dict[str, Path]:
+        """
+        生成分开的技术标和商务标（预览版本，简化内容）
+
+        Args:
+            tender_info: 招标信息
+            company_info: 公司信息
+            matched_data: 匹配的数据（资质、案例、产品等）
+
+        Returns:
+            包含技术标和商务标路径的字典
+        """
+        # 预览版本只显示基本信息和匹配结果
+
+        # 生成技术标预览
+        tech_doc = Document()
+        self._add_cover_v2(tech_doc, tender_info, company_info, "技术标（预览）")
+
+        # 添加目录
+        tech_doc.add_heading("目录", level=1)
+        tech_doc.add_paragraph("1. 公司简介")
+        tech_doc.add_paragraph("2. 技术方案概述")
+        tech_doc.add_paragraph("3. 项目团队")
+        tech_doc.add_paragraph("4. 资质证书")
+        tech_doc.add_paragraph("5. 项目案例")
+        tech_doc.add_paragraph("6. 产品说明")
+        tech_doc.add_page_break()
+
+        # 添加公司简介（简化）
+        tech_doc.add_heading("1. 公司简介", level=1)
+        tech_doc.add_paragraph(company_info['name'])
+        tech_doc.add_paragraph(company_info.get('description', ''))
+        tech_doc.add_page_break()
+
+        # 添加技术方案概述（简化）
+        tech_doc.add_heading("2. 技术方案概述", level=1)
+        tech_doc.add_paragraph("（预览版本，技术方案将在正式版本中详细展示）")
+        tech_doc.add_paragraph(f"需求分析：共 {len(tender_info.get('requirements', []))} 个需求")
+        tech_doc.add_page_break()
+
+        # 添加项目团队（简化）
+        tech_doc.add_heading("3. 项目团队", level=1)
+        tech_doc.add_paragraph("（预览版本，项目团队将在正式版本中详细展示）")
+        personnel = matched_data.get('personnel', [])[:3]  # 只显示前3个
+        for p in personnel:
+            tech_doc.add_paragraph(f"• {p.get('name', '')} - {p.get('role', '')}")
+        tech_doc.add_page_break()
+
+        # 添加资质证书（简化）
+        tech_doc.add_heading("4. 资质证书", level=1)
+        tech_doc.add_paragraph(f"共匹配到 {len(matched_data.get('qualifications', []))} 项资质")
+        qualifications = matched_data.get('qualifications', [])[:5]  # 只显示前5个
+        for q in qualifications:
+            tech_doc.add_paragraph(f"• {q['name']} - {q['level']}")
+        tech_doc.add_paragraph("（完整证书将在正式版本中显示）")
+        tech_doc.add_page_break()
+
+        # 添加项目案例（简化）
+        tech_doc.add_heading("5. 项目案例", level=1)
+        tech_doc.add_paragraph(f"共匹配到 {len(matched_data.get('cases', []))} 项案例")
+        cases = matched_data.get('cases', [])[:3]  # 只显示前3个
+        for c in cases:
+            tech_doc.add_paragraph(f"• {c['project_name']} - {c.get('client', '')}")
+        tech_doc.add_paragraph("（完整案例将在正式版本中显示）")
+        tech_doc.add_page_break()
+
+        # 添加产品说明（简化）
+        tech_doc.add_heading("6. 产品说明", level=1)
+        tech_doc.add_paragraph(f"共匹配到 {len(matched_data.get('products', []))} 项产品")
+        products = matched_data.get('products', [])[:3]  # 只显示前3个
+        for p in products:
+            tech_doc.add_paragraph(f"• {p['name']} - {p['model']}")
+        tech_doc.add_paragraph("（完整产品信息将在正式版本中显示）")
+
+        # 保存技术标预览
+        tech_output_dir = Path("output")
+        tech_output_dir.mkdir(exist_ok=True)
+        tech_filename = f"技术标预览_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx"
+        tech_path = tech_output_dir / tech_filename
+        tech_doc.save(tech_path)
+
+        # 生成商务标预览
+        commercial_doc = Document()
+        self._add_cover_v2(commercial_doc, tender_info, company_info, "商务标（预览）")
+
+        # 添加目录
+        commercial_doc.add_heading("目录", level=1)
+        commercial_doc.add_paragraph("1. 报价说明")
+        commercial_doc.add_paragraph("2. 报价汇总")
+        commercial_doc.add_paragraph("3. 合同条款")
+        commercial_doc.add_page_break()
+
+        # 添加报价说明（简化）
+        commercial_doc.add_heading("1. 报价说明", level=1)
+        commercial_doc.add_paragraph("（预览版本，详细报价将在正式版本中展示）")
+        commercial_doc.add_paragraph("本报价为预览报价，仅供参考。")
+        commercial_doc.add_page_break()
+
+        # 添加报价汇总（简化）
+        commercial_doc.add_heading("2. 报价汇总", level=1)
+        commercial_doc.add_paragraph("（预览版本，详细报价将在正式版本中展示）")
+        commercial_doc.add_page_break()
+
+        # 添加合同条款（简化）
+        commercial_doc.add_heading("3. 合同条款", level=1)
+        commercial_doc.add_paragraph("（预览版本，详细合同条款将在正式版本中展示）")
+
+        # 保存商务标预览
+        commercial_filename = f"商务标预览_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx"
+        commercial_path = tech_output_dir / commercial_filename
+        commercial_doc.save(commercial_path)
+
+        return {
+            "tech": tech_path,
+            "commercial": commercial_path
+        }
+
     # ==================== 添加章节的方法 ====================
 
     def _add_cover_v2(self, doc: Document, tender_info: Dict, company_info: Dict, bid_type: str = "投标文件"):
