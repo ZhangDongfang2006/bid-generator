@@ -53,7 +53,7 @@ parser = TenderParser(data_dir)
 templates_dir = Path(__file__).parent / "templates"
 output_dir = Path("output")
 output_dir.mkdir(exist_ok=True)
-generator = BidGenerator(templates_dir, output_dir, image_width_inches=5.5)
+generator = BidGenerator(templates_dir, output_dir)
 
 # ==================== 会话状态 ====================
 
