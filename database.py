@@ -18,8 +18,14 @@ class CompanyDatabase:
     """公司资料数据库"""
 
     def __init__(self, data_dir: Path):
-        # 检查是否使用示例数据
-        self.use_demo_data = os.getenv("USE_DEMO_DATA", "true").lower() == "true"
+        # 检查真实数据目录是否存在
+        real_data_exists = data_dir.exists() and any(
+            (data_dir / f).exists()
+            for f in ["qualifications.json", "cases.json", "products.json", "personnel.json"]
+        )
+
+        # 如果真实数据存在，使用真实数据；否则使用示例数据
+        self.use_demo_data = not real_data_exists
         self.data_dir = data_dir
         self.examples_dir = data_dir.parent / "data" / "examples"
 
@@ -30,20 +36,24 @@ class CompanyDatabase:
             print("📊 数据模式：示例数据（DEMO）")
             print("=" * 60)
             print("✓ 当前使用示例数据进行演示")
-            print("✓ 不会加载真实公司数据")
+            print("✓ 未检测到本地数据文件")
             print("")
-            print("💡 如需使用真实数据，请设置环境变量：")
-            print("   export USE_DEMO_DATA=false")
-            print("   或在 .env 文件中添加：USE_DEMO_DATA=false")
+            print("💡 如需使用真实数据，请将数据文件放到以下目录：")
+            print(f"   {self.data_dir}")
+            print("   需要的文件：")
+            print("   - qualifications.json")
+            print("   - cases.json")
+            print("   - products.json")
+            print("   - personnel.json")
             print("=" * 60)
         else:
             self.base_dir = data_dir
             print("=" * 60)
             print("📊 数据模式：真实数据（PRODUCTION）")
             print("=" * 60)
+            print("✓ 检测到本地数据文件")
             print("✓ 正在加载真实公司数据")
-            print("✓ 资质、案例、产品、人员信息将全部加载")
-            print("✓ 此数据仅供内部使用，不应提交到代码仓库")
+            print(f"✓ 数据目录：{self.base_dir}")
             print("=" * 60)
 
         # 设置数据文件路径
@@ -323,14 +333,20 @@ class CompanyDatabase:
 
 # ==================== 数据模式检查 ====================
 
-def check_data_mode() -> str:
+def check_data_mode(data_dir: Path = None) -> str:
     """检查当前数据模式"""
-    use_demo = os.getenv("USE_DEMO_DATA", "true").lower() == "true"
+    if data_dir is None:
+        data_dir = Path(__file__).parent.parent / "data"
 
-    if use_demo:
-        return "DEMO（示例数据）"
-    else:
+    real_data_exists = data_dir.exists() and any(
+        (data_dir / f).exists()
+        for f in ["qualifications.json", "cases.json", "products.json", "personnel.json"]
+    )
+
+    if real_data_exists:
         return "PRODUCTION（真实数据）"
+    else:
+        return "DEMO（示例数据）"
 
 
 # ==================== 数据目录结构说明 ====================
@@ -356,9 +372,11 @@ data/                    # 忽略真实数据目录
 output/                 # 忽略输出目录
 uploads/                # 忽略上传目录
 
-环境变量控制：
-USE_DEMO_DATA=true     # 使用示例数据（默认）
-USE_DEMO_DATA=false    # 使用真实数据
+数据模式自动检测：
+- 如果 data/ 目录存在且包含任意数据文件 → 使用真实数据
+- 否则 → 使用示例数据
+
+无需手动设置环境变量，系统会自动检测！
 """
 
 
