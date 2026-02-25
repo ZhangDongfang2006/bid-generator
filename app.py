@@ -151,19 +151,41 @@ else:
             parsing_status.empty()
         
         # 合并解析结果
-        st.session_state.parse_result = ParseResult(all_requirements, confidence_score=sum(confidence_scores) / len(confidence_scores))
-        
+        avg_confidence = sum(confidence_scores) / len(confidence_scores)
+        st.session_state.parse_result = ParseResult(all_requirements, confidence_score=avg_confidence)
+        st.session_state.confidence_scores = confidence_scores  # 保存每个文件的置信度
+
         # 显示解析结果
         st.markdown("---")
         st.subheader("📋 文件解析结果")
-        
-        # 显示置信度
-        st.markdown(f"### {parse_result.get_confidence_color()} 解析置信度")
+
+        # 显示每个文件的置信度
+        st.markdown(f"### 📊 各文件解析置信度")
+        for i, (file, score) in enumerate(zip(uploaded_files, confidence_scores), 1):
+            # 根据置信度显示颜色
+            if score >= 0.8:
+                color = "🟢"
+            elif score >= 0.6:
+                color = "🟡"
+            elif score >= 0.4:
+                color = "🟠"
+            else:
+                color = "⚪"
+            st.metric(
+                f"文件 {i}: {file.name}",
+                f"{score:.2f}",
+                delta=f"{score:.2f}",
+                help=f"解析置信度 - AI 对此文件解析的可信程度"
+            )
+
+        # 显示总置信度
+        st.markdown("---")
+        st.markdown(f"### {parse_result.get_confidence_color()} 总体解析置信度")
         st.metric(
-            "置信度",
-            f"{parse_result.confidence_score:.2f}",
-            delta=f"{parse_result.confidence_score:.2f}",
-            help=f"{parse_result.get_confidence_level()} - AI 对文件解析的可信程度"
+            "平均置信度",
+            f"{avg_confidence:.2f}",
+            delta=f"{avg_confidence:.2f}",
+            help=f"{parse_result.get_confidence_level()} - AI 对所有文件解析的平均可信程度"
         )
         
         # 显示解析出的需求
@@ -277,47 +299,23 @@ else:
         st.info("✅ 生成的投标文件中将自动包含证书图片")
         
         # 生成选项
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            separate_bids = st.checkbox("技术标和商务标分开生成", value=True, key="separate_bids")
-            st.caption("勾选后，将生成两个独立的文件")
-        
-        with col2:
-            # 添加图片大小调节
-            image_width = st.slider(
-                "证书图片大小",
-                min_value=3.0,
-                max_value=7.0,
-                value=5.5,
-                step=0.5,
-                help="调整证书图片的大小（3.0-7.0 英寸）"
-            )
-            st.caption(f"当前设置：{image_width} 英寸（约{image_width*2.54:.1f} 厘米）")
-        
+        # 生成选项
+        separate_bids = st.checkbox("技术标和商务标分开生成", value=True, key="separate_bids")
+        st.caption("勾选后，将生成两个独立的文件")
+
         # 生成按钮
         if st.button("🚀 生成投标文件", type="primary", key="generate_bid"):
             try:
-                st.info("🔄 正在生成正式版本投标文件...")
-                
                 # 更新 tender_info
                 st.session_state.tender_info['show_cert_images'] = True
                 st.session_state.tender_info['generate_time'] = datetime.now().isoformat()
-                
+
                 # 准备匹配数据
                 matched_data = st.session_state.matched_data
-                
-                # 调试信息
-                st.write(f"生成信息：")
-                st.write(f"  - 显示证书图片：是（默认启用）")
-                st.write(f"  - 匹配资质：{len(matched_data.get('qualifications', []))}")
-                st.write(f"  - 匹配案例：{len(matched_data.get('cases', []))}")
-                st.write(f"  - 匹配产品：{len(matched_data.get('products', []))}")
-                
+
+                # 生成投标文件
                 if separate_bids:
                     # 生成技术标和商务标分开
-                    generator = BidGenerator(templates_dir, output_dir)
-                    
                     output_paths = generator.generate_separate_bids(
                         st.session_state.tender_info,
                         config.COMPANY_INFO,
@@ -325,16 +323,40 @@ else:
                         show_cert_images=True
                     )
                     st.success("✅ 投标文件生成成功！")
+                else:
+                    # 生成单一投标文件
+                    output_path = generator.generate_bid(
+                        st.session_state.tender_info,
+                        config.COMPANY_INFO,
+                        matched_data,
+                        show_cert_images=True
+                    )
+                    st.success("✅ 投标文件生成成功！")
+
                 # 添加下载按钮
                 st.markdown("---")
                 st.markdown("### 📥 下载投标文件")
-                
+
                 # 查找生成的文件
                 output_dir = Path("output")
                 if output_dir.exists():
                     files = list(output_dir.glob("*.docx"))
-                    
+
                     if files:
-                        latest_file = max(files, key=lambda f: f.stat().st_mtime)
+                        # 按修改时间排序，显示最新的文件
+                        latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:5]
+
+                        for file in latest_files:
+                            with open(file, 'rb') as f:
+                                st.download_button(
+                                    label=f"⬇️ 下载 {file.name}",
+                                    data=f,
+                                    file_name=file.name,
+                                    mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                    key=f"download_{file.name}"
+                                )
+                            st.caption(f"生成时间: {datetime.fromtimestamp(file.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S')} | 大小: {file.stat().st_size / 1024:.1f} KB")
+                    else:
+                        st.info("暂无生成的文件")
             except Exception as e:
                 st.error(f"❌ 生成失败：{e}")
