@@ -46,8 +46,22 @@ Thumbs.db
 *.log
 
 # Output
-outputs/
-*.docx
-*.pdf
+output/
 uploads/
+test-results/
+
+# Old test and fix files (should be ignored)
+add_certificates.py
+add_pdf_*.py
+fix_*.py
+generator_backup*.py
+generator_*.pdf
+pdf_to_image_solution.py
+auto_*.py
+modification_guide.py
+check_*.py
+patch_*.py
+proper_fix_*.py
+replace_*.py
+quick_*.py
 EOF
