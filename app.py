@@ -123,34 +123,46 @@ else:
     
     # 第一步：上传招标文件
     st.header("📤 第一步：上传招标文件")
-    st.markdown("支持 PDF、Word (.docx, .doc) 格式的招标文件")
+    st.markdown("支持 PDF、Word (.docx, .doc) 格式的招标文件（可上传多个文件）")
     
-    # 文件上传
-    uploaded_file = st.file_uploader(
+    # 文件上传（支持多个文件）
+    uploaded_files = st.file_uploader(
         "上传招标文件",
         type=['pdf', 'docx', 'doc'],
-        help="支持 PDF、Word 格式",
+        accept_multiple_files=True,
+        help="支持上传多个招标文件，将自动合并解析结果",
         key="tender_file_uploader"
     )
     
     # 解析上传的文件
-    if uploaded_file is not None:
-        # 保存到临时文件
-        temp_file = Path("temp") / uploaded_file.name
-        temp_file.parent.mkdir(exist_ok=True)
+    if uploaded_files is not None and len(uploaded_files) > 0:
+        st.info(f"📄 已上传 {len(uploaded_files)} 个文件")
         
-        with open(temp_file, 'wb') as f:
-            f.write(uploaded_file.getbuffer())
+        # 合并所有文件的解析结果
+        all_requirements = []
+        confidence_scores = []
         
-        # 解析文件（使用 st.empty 控制显示）
-        parsing_status = st.empty()
-        parsing_status.info("🔄 正在解析文件...")
+        for i, uploaded_file in enumerate(uploaded_files, 1):
+            # 保存到临时文件
+            temp_file = Path("temp") / uploaded_file.name
+            temp_file.parent.mkdir(exist_ok=True)
+            
+            with open(temp_file, 'wb') as f:
+                f.write(uploaded_file.getbuffer())
+            
+            # 解析文件
+            parsing_status = st.empty()
+            parsing_status.info(f"🔄 正在解析第 {i}/{len(uploaded_files)} 个文件: {uploaded_file.name}...")
+            
+            parse_result = parser.parse_file(temp_file)
+            all_requirements.extend(parse_result.requirements)
+            confidence_scores.append(parse_result.confidence_score)
+            
+            # 清除解析状态
+            parsing_status.empty()
         
-        parse_result = parser.parse_file(temp_file)
-        st.session_state.parse_result = parse_result
-        
-        # 清除解析状态
-        parsing_status.empty()
+        # 合并解析结果
+        st.session_state.parse_result = ParseResult(all_requirements, confidence_score=sum(confidence_scores) / len(confidence_scores))
         
         # 显示解析结果
         st.markdown("---")
@@ -416,7 +428,36 @@ else:
                 
                 st.markdown("---")
                 
-                # 提供预览下载和正式下载
+                # 在浏览器中预览文档内容
+                st.markdown("### 📄 文档内容预览")
+                
+                try:
+                    from docx import Document
+                    doc = Document(str(latest_file))
+                    
+                    # 显示文档内容
+                    for i, para in enumerate(doc.paragraphs):
+                        if para.text.strip():
+                            # 跳过目录行
+                            if "目录" in para.text:
+                                continue
+                            
+                            # 根据文本类型决定显示方式
+                            if i < 10:  # 前10段作为标题
+                                st.markdown(f"**{para.text}**")
+                            else:  # 其余作为正文
+                                st.text(para.text)
+                        
+                        if i > 50:  # 只显示前50段
+                            st.info("...（更多内容请下载完整文件查看）")
+                            break
+                
+                except Exception as e:
+                    st.error(f"预览失败：{e}")
+                
+                st.markdown("---")
+                
+                # 下载选项
                 st.markdown("### 📥 下载选项")
                 
                 col1, col2 = st.columns(2)
@@ -425,18 +466,21 @@ else:
                     # 下载预览版本
                     with open(latest_file, 'rb') as f:
                         st.download_button(
-                            label="👁 下载预览版本（推荐先查看）",
+                            label="📥 下载预览版本",
                             data=f,
                             file_name=latest_file.name,
                             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            help="预览版本只包含摘要信息，用于快速检查文档结构"
+                            help="预览版本只包含摘要信息"
                         )
                 
                 with col2:
                     # 确认下载正式版本
-                    if st.button("✅ 确认下载正式版本", type="primary", key="confirm_final"):
+                    if st.button("✅ 生成并下载正式版本", type="primary", key="generate_final"):
                         try:
                             st.info("🔄 正在生成正式版本...")
+                            
+                            # 从 session state 获取匹配数据
+                            matched_data = st.session_state.matched_data
                             
                             if separate_bids:
                                 # 生成正式的技术标和商务标
@@ -473,8 +517,8 @@ else:
             - **正式版本**：包含完整内容和所有匹配的数据
             
             **建议流程**：
-            1. 下载预览版本，快速检查文档结构
-            2. 确认无误后，点击"确认下载正式版本"
+            1. 在上方预览文档内容
+            2. 确认无误后，点击"生成并下载正式版本"
             3. 下载完整的正式版本投标文件
             """)
     
