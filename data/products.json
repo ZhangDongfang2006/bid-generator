@@ -1,0 +1,826 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中，作为接受和分配电能之用。具有完善的五防联锁功能，结构紧凑，运行安全可靠。",
+      "base_price": 50000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 2,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工、冶金纺织等行业的低压配电系统，作为动力、照明及配电设备的电能转换、分配与控制。",
+      "base_price": 30000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 3,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站，将高压开关设备、配电变压器和低压配电装置有机地组合在一起，适用于城市建筑、居民小区、工矿企业、公共场所等。",
+      "base_price": 80000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 4,
+      "name": "箱型固定式金属封闭开关设备",
+      "model": "XGN15-12",
+      "category": "高压开关柜",
+      "description": "用于12kV三相交流50Hz电力系统中，作为接受和分配电能之用。采用真空断路器，性能优越，维护方便。",
+      "base_price": 45000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 5,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN61-40.5",
+      "category": "高压开关柜",
+      "description": "适用于40.5kV三相交流50Hz电力系统中，作为接受和分配电能之用。采用手车式结构，操作灵活，安全可靠。",
+      "base_price": 120000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 6,
+      "name": "固定分隔式低压开关柜",
+      "model": "GCS",
+      "category": "低压开关柜",
+      "description": "用于三相交流50Hz、额定电压380V、额定电流4000A及以下的配电系统，作为动力配电、电动机控制、照明配电使用。",
+      "base_price": 28000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 7,
+      "name": "低压固定式配电柜",
+      "model": "GGD",
+      "category": "低压开关柜",
+      "description": "用于交流50Hz、额定电压380V及以下的配电系统中，作为动力、照明配电设备使用。结构简单，价格低廉。",
+      "base_price": 15000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 8,
+      "name": "交流低压无功功率补偿装置",
+      "model": "GGJ",
+      "category": "无功补偿",
+      "description": "用于交流50Hz、额定电压380V的配电系统中，自动补偿无功功率，提高功率因数，降低线路损耗。",
+      "base_price": 20000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 9,
+      "name": "交流金属封闭环网开关设备",
+      "model": "HXGN-12",
+      "category": "高压开关柜",
+      "description": "适用于10kV三相交流50Hz的电力系统中，作为环网供电或终端供电使用。结构紧凑，占地面积小。",
+      "base_price": 35000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 10,
+      "name": "低压无功动态补偿滤波柜",
+      "model": "XL-21",
+      "category": "无功补偿",
+      "description": "用于配电系统，实现无功补偿和谐波滤波功能，提高供电质量，降低能耗。",
+      "base_price": 18000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 11,
+      "name": "户内高压真空断路器",
+      "model": "VS1-12",
+      "category": "开关设备",
+      "description": "用于12kV三相交流50Hz电力系统中，作为控制和保护设备。灭弧室采用真空灭弧，电寿命长，免维护。",
+      "base_price": 8000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 12,
+      "name": "户内高压真空断路器",
+      "model": "ZN63A-12",
+      "category": "开关设备",
+      "description": "用于12kV电力系统中，作为控制和保护设备。性能稳定，操作方便。",
+      "base_price": 7500,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 13,
+      "name": "预装式箱式变电站",
+      "model": "YBW-12",
+      "category": "预制舱",
+      "description": "将高压开关设备、变压器、低压配电装置组合在一起的预装式变电站，安装快速，移动方便。",
+      "base_price": 85000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 14,
+      "name": "户内交流金属铠装中置式开关设备",
+      "model": "KYN28A-24",
+      "category": "高压开关柜",
+      "description": "用于24kV三相交流50Hz电力系统中，作为接受和分配电能之用。具有完善的安全防护措施。",
+      "base_price": 90000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 15,
+      "name": "智能预制舱式变电站",
+      "model": "ZGS13",
+      "category": "预制舱",
+      "description": "集成智能化监控系统的预制舱式变电站，可实现远程监控、自动调节等功能。",
+      "base_price": 120000,
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 16,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-12T10:04:42.046426"
+    },
+    {
+      "id": 17,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-12T10:04:42.046593"
+    },
+    {
+      "id": 18,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-12T10:04:42.046750"
+    },
+    {
+      "id": 19,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T08:36:05.819364"
+    },
+    {
+      "id": 20,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T08:36:05.819685"
+    },
+    {
+      "id": 21,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T08:36:05.819881"
+    },
+    {
+      "id": 22,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T11:44:45.124769"
+    },
+    {
+      "id": 23,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T11:44:45.124982"
+    },
+    {
+      "id": 24,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T11:44:45.125180"
+    },
+    {
+      "id": 25,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T12:24:36.786050"
+    },
+    {
+      "id": 26,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T12:24:36.786304"
+    },
+    {
+      "id": 27,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T12:24:36.786539"
+    },
+    {
+      "id": 28,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T12:39:59.437124"
+    },
+    {
+      "id": 29,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T12:39:59.437371"
+    },
+    {
+      "id": 30,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T12:39:59.437618"
+    },
+    {
+      "id": 31,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T12:45:41.541553"
+    },
+    {
+      "id": 32,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T12:45:41.541819"
+    },
+    {
+      "id": 33,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T12:45:41.542077"
+    },
+    {
+      "id": 34,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T12:51:09.079629"
+    },
+    {
+      "id": 35,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T12:51:09.079926"
+    },
+    {
+      "id": 36,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T12:51:09.080236"
+    },
+    {
+      "id": 37,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-13T17:02:18.457960"
+    },
+    {
+      "id": 38,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-13T17:02:18.458266"
+    },
+    {
+      "id": 39,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-13T17:02:18.458537"
+    },
+    {
+      "id": 40,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T08:52:48.347650"
+    },
+    {
+      "id": 41,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T08:52:48.347930"
+    },
+    {
+      "id": 42,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T08:52:48.348203"
+    },
+    {
+      "id": 43,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T09:00:09.456767"
+    },
+    {
+      "id": 44,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T09:00:09.457067"
+    },
+    {
+      "id": 45,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T09:00:09.457386"
+    },
+    {
+      "id": 46,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T09:06:31.153069"
+    },
+    {
+      "id": 47,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T09:06:31.153389"
+    },
+    {
+      "id": 48,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T09:06:31.153704"
+    },
+    {
+      "id": 49,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T12:50:23.039945"
+    },
+    {
+      "id": 50,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T12:50:23.040283"
+    },
+    {
+      "id": 51,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T12:50:23.040624"
+    },
+    {
+      "id": 52,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T14:16:53.467278"
+    },
+    {
+      "id": 53,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T14:16:53.467627"
+    },
+    {
+      "id": 54,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T14:16:53.467939"
+    },
+    {
+      "id": 55,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T14:23:26.925033"
+    },
+    {
+      "id": 56,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T14:23:26.925563"
+    },
+    {
+      "id": 57,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T14:23:26.925915"
+    },
+    {
+      "id": 58,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T14:31:37.278449"
+    },
+    {
+      "id": 59,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T14:31:37.278808"
+    },
+    {
+      "id": 60,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T14:31:37.279163"
+    },
+    {
+      "id": 61,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T15:01:36.765052"
+    },
+    {
+      "id": 62,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T15:01:36.765409"
+    },
+    {
+      "id": 63,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T15:01:36.765759"
+    },
+    {
+      "id": 64,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T15:17:50.630721"
+    },
+    {
+      "id": 65,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T15:17:50.631098"
+    },
+    {
+      "id": 66,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T15:17:50.631461"
+    },
+    {
+      "id": 67,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-14T15:21:42.561604"
+    },
+    {
+      "id": 68,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-14T15:21:42.562001"
+    },
+    {
+      "id": 69,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-14T15:21:42.562385"
+    },
+    {
+      "id": 70,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T08:20:24.220220"
+    },
+    {
+      "id": 71,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T08:20:24.220627"
+    },
+    {
+      "id": 72,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T08:20:24.221021"
+    },
+    {
+      "id": 73,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T09:55:38.026304"
+    },
+    {
+      "id": 74,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T09:55:38.026736"
+    },
+    {
+      "id": 75,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T09:55:38.027171"
+    },
+    {
+      "id": 76,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T10:44:13.295937"
+    },
+    {
+      "id": 77,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T10:44:13.296378"
+    },
+    {
+      "id": 78,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T10:44:13.296816"
+    },
+    {
+      "id": 79,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T10:57:55.919182"
+    },
+    {
+      "id": 80,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T10:57:55.919623"
+    },
+    {
+      "id": 81,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T10:57:55.920054"
+    },
+    {
+      "id": 82,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T10:58:14.486115"
+    },
+    {
+      "id": 83,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T10:58:14.486594"
+    },
+    {
+      "id": 84,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T10:58:14.487040"
+    },
+    {
+      "id": 85,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T14:27:27.247239"
+    },
+    {
+      "id": 86,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T14:27:27.247735"
+    },
+    {
+      "id": 87,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T14:27:27.248219"
+    },
+    {
+      "id": 88,
+      "name": "户内交流金属铠装移开式开关设备",
+      "model": "KYN28A-12",
+      "category": "高压开关柜",
+      "description": "适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+      "base_price": 50000,
+      "created_at": "2026-02-24T15:41:47.299694"
+    },
+    {
+      "id": 89,
+      "name": "低压抽出式开关柜",
+      "model": "MNS",
+      "category": "低压开关柜",
+      "description": "适用于发电厂、变电站、石油化工等场所",
+      "base_price": 30000,
+      "created_at": "2026-02-24T15:41:47.300203"
+    },
+    {
+      "id": 90,
+      "name": "箱式变电站",
+      "model": "ZGS11",
+      "category": "预制舱",
+      "description": "一体化预装式变电站",
+      "base_price": 80000,
+      "created_at": "2026-02-24T15:41:47.300697"
+    }
+  ],
+  "prices": {
+    "KYN28A-12": 50000,
+    "MNS": 30000,
+    "ZGS11": 80000,
+    "XGN15-12": 45000,
+    "KYN61-40.5": 120000,
+    "GCS": 28000,
+    "GGD": 15000,
+    "GGJ": 20000,
+    "HXGN-12": 35000,
+    "XL-21": 18000
+  }
+}

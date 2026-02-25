@@ -1,0 +1,582 @@
+{
+  "management": [
+    {
+      "id": 1,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T08:36:05.820178"
+    },
+    {
+      "id": 2,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T08:36:05.820260"
+    },
+    {
+      "id": 3,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T11:44:45.125481"
+    },
+    {
+      "id": 4,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T11:44:45.125574"
+    },
+    {
+      "id": 5,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T12:24:36.786828"
+    },
+    {
+      "id": 6,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T12:24:36.786935"
+    },
+    {
+      "id": 7,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T12:39:59.437931"
+    },
+    {
+      "id": 8,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T12:39:59.438040"
+    },
+    {
+      "id": 9,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T12:45:41.542410"
+    },
+    {
+      "id": 10,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T12:45:41.542525"
+    },
+    {
+      "id": 11,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T12:51:09.080504"
+    },
+    {
+      "id": 12,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T12:51:09.080633"
+    },
+    {
+      "id": 13,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-13T17:02:18.458875"
+    },
+    {
+      "id": 14,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-13T17:02:18.459012"
+    },
+    {
+      "id": 15,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T08:52:48.348550"
+    },
+    {
+      "id": 16,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T08:52:48.348735"
+    },
+    {
+      "id": 17,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T09:00:09.457669"
+    },
+    {
+      "id": 18,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T09:00:09.457878"
+    },
+    {
+      "id": 19,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T09:06:31.154009"
+    },
+    {
+      "id": 20,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T09:06:31.154236"
+    },
+    {
+      "id": 21,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T12:50:23.040931"
+    },
+    {
+      "id": 22,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T12:50:23.041158"
+    },
+    {
+      "id": 23,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T14:16:53.468343"
+    },
+    {
+      "id": 24,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T14:16:53.468565"
+    },
+    {
+      "id": 25,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T14:23:26.926236"
+    },
+    {
+      "id": 26,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T14:23:26.926479"
+    },
+    {
+      "id": 27,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T14:31:37.279529"
+    },
+    {
+      "id": 28,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T14:31:37.279775"
+    },
+    {
+      "id": 29,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T15:01:36.766092"
+    },
+    {
+      "id": 30,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T15:01:36.766350"
+    },
+    {
+      "id": 31,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T15:17:50.631824"
+    },
+    {
+      "id": 32,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T15:17:50.632115"
+    },
+    {
+      "id": 33,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-14T15:21:42.562753"
+    },
+    {
+      "id": 34,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-14T15:21:42.563052"
+    },
+    {
+      "id": 35,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T08:20:24.221461"
+    },
+    {
+      "id": 36,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T08:20:24.221767"
+    },
+    {
+      "id": 37,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T09:55:38.027623"
+    },
+    {
+      "id": 38,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T09:55:38.028048"
+    },
+    {
+      "id": 39,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T10:44:13.297227"
+    },
+    {
+      "id": 40,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T10:44:13.297559"
+    },
+    {
+      "id": 41,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T10:57:55.920476"
+    },
+    {
+      "id": 42,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T10:57:55.920821"
+    },
+    {
+      "id": 43,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T10:58:14.487466"
+    },
+    {
+      "id": 44,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T10:58:14.487821"
+    },
+    {
+      "id": 45,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T14:27:27.248674"
+    },
+    {
+      "id": 46,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T14:27:27.249038"
+    },
+    {
+      "id": 47,
+      "name": "张三",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": [
+        "注册电气工程师",
+        "高级工程师"
+      ],
+      "created_at": "2026-02-24T15:41:47.301165"
+    },
+    {
+      "id": 48,
+      "name": "李四",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": [
+        "一级建造师",
+        "PMP"
+      ],
+      "created_at": "2026-02-24T15:41:47.301532"
+    }
+  ],
+  "engineers": [],
+  "workers": []
+}

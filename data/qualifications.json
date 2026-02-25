@@ -1,0 +1,690 @@
+{
+  "qualifications": [
+    {
+      "id": 1,
+      "name": "质量管理体系认证",
+      "level": "GB/T19001-2016/ISO9001:2015",
+      "cert_no": "CN14Q46720ROM",
+      "valid_until": "2025-12-31",
+      "cert_file": "certificates/03、认证证书/01、质量管理体系认证证书-中英文版.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 2,
+      "name": "环境管理体系认证",
+      "level": "GB/T24001-2016/ISO14001:2015",
+      "cert_no": "",
+      "valid_until": "2025-12-31",
+      "cert_file": "certificates/03、认证证书/02、环境管理体系认证证书-中英文版.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 3,
+      "name": "职业健康安全管理体系认证",
+      "level": "GB/T45001-2020/ISO45001:2018",
+      "cert_no": "",
+      "valid_until": "2025-12-31",
+      "cert_file": "certificates/03、认证证书/03、职业健康安全管理体系认证证书-中英文版.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 4,
+      "name": "能源管理体系认证",
+      "level": "GB/T23331-2020/ISO50001:2018",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/03、认证证书/04、能源管理体系认证证书-中英文版.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 5,
+      "name": "国家高新技术企业",
+      "level": "国家级",
+      "cert_no": "",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 6,
+      "name": "强制性产品认证（3C认证）",
+      "level": "CNCA-C10-01",
+      "cert_no": "",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 7,
+      "name": "高压开关设备型式试验报告",
+      "level": "KYN28-12",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/05、检验报告/02、户内高压交流金属铠装移开式开关设备检验报告  型号：KYN28-12 -1250-31.5 .pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 8,
+      "name": "低压开关设备型式试验报告",
+      "level": "MNS",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/06、试验报告/03、低压抽出式开关柜型式试验报告  型号：MNS 4000A-1600A.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 9,
+      "name": "箱式变电站型式试验报告",
+      "level": "YZB",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/05、检验报告/01、高压低压预装式变电站检验报告 型号：YB□-12 -0.4-1600.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 10,
+      "name": "预制舱型式试验报告",
+      "level": "YZC",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/05、检验报告/03、预制舱检测报告 型号：YZC.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 11,
+      "name": "SIVACON 8PT低压开关柜型式试验报告",
+      "level": "SIVACON 8PT",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/08、型式试验证书/03、低压开关柜（低压成套开关设备）产品认证证书 （SIVACON 8PT 1600A-400A） .pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 12,
+      "name": "计算机供电柜供电单位检测系统软件著作权",
+      "level": "计算机软件著作权",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/12、计算机软件著作证书/01、计算机供电柜供电单位检测系统登记证书.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 13,
+      "name": "光储能系统能量管理软件著作权",
+      "level": "计算机软件著作权",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/12、计算机软件著作证书/02、计算机光储能系统能量管理软件登记证书.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 14,
+      "name": "配电柜温度控制系统软件著作权",
+      "level": "计算机软件著作权",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/12、计算机软件著作证书/03、计算机配电柜温度控制系统登记证书.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 15,
+      "name": "ESG报告",
+      "level": "绿色报告",
+      "cert_no": "CCF-ESG-2025066",
+      "valid_until": "",
+      "cert_file": "certificates/13、绿色报告/01、海越（湖北）电气股份有限公司ESG报告（报告编号：CCF-ESG-2025066） .pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 16,
+      "name": "绿色制造报告",
+      "level": "绿色报告",
+      "cert_no": "CCF-LSZZ-2025066",
+      "valid_until": "",
+      "cert_file": "certificates/13、绿色报告/11、绿色制造报告（报告编号：CCF-LSZZ-2025066）.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 17,
+      "name": "节能评估报告",
+      "level": "绿色报告",
+      "cert_no": "CCF-JNPG-2025066",
+      "valid_until": "",
+      "cert_file": "certificates/13、绿色报告/18、节能评估报告（报告编号：CCF-JNPG-2025066）.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 18,
+      "name": "能耗降低报告",
+      "level": "绿色报告",
+      "cert_no": "CCF-NHJD-2025066",
+      "valid_until": "",
+      "cert_file": "certificates/13、绿色报告/09、能耗降低报告（报告编号：CCF-NHJD-2025066）.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 19,
+      "name": "数据设备用网络机柜检验报告",
+      "level": "宁波海越检验报告",
+      "cert_no": "ZDT2508A4635",
+      "valid_until": "",
+      "cert_file": "certificates/16、宁波海越检验报告/01、数据设备用网络机柜委托检验 编号：ZDT2508A4635.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 20,
+      "name": "列头柜检验报告",
+      "level": "宁波海越检验报告",
+      "cert_no": "ZDT2508A4636",
+      "valid_until": "",
+      "cert_file": "certificates/16、宁波海越检验报告/02、列头柜检验报告 编号：ZDT2508A4636.pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 21,
+      "name": "开关柜资质业绩凭证",
+      "level": "资质业绩凭证",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/20、资质业绩凭证单/宁波海越电器制造有限公司（加盖公章）开关柜（总部委托省公司组织实施）资质业绩凭证 .pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 22,
+      "name": "箱式变电站资质业绩凭证",
+      "level": "资质业绩凭证",
+      "cert_no": "",
+      "valid_until": "",
+      "cert_file": "certificates/20、资质业绩凭证单/宁波海越电器制造有限公司（加盖公章）箱式变电站（总部委托省公司组织实施）资质业绩 .pdf",
+      "created_at": "2026-02-13T12:00:00.000000"
+    },
+    {
+      "id": 23,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:24:36.784515"
+    },
+    {
+      "id": 24,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:24:36.784909"
+    },
+    {
+      "id": 25,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:39:59.435696"
+    },
+    {
+      "id": 26,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:39:59.436080"
+    },
+    {
+      "id": 27,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:45:41.540090"
+    },
+    {
+      "id": 28,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:45:41.540500"
+    },
+    {
+      "id": 29,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:51:09.078047"
+    },
+    {
+      "id": 30,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-13T12:51:09.078687"
+    },
+    {
+      "id": 31,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-13T17:02:18.456320"
+    },
+    {
+      "id": 32,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-13T17:02:18.456754"
+    },
+    {
+      "id": 33,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T08:52:48.346085"
+    },
+    {
+      "id": 34,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T08:52:48.346503"
+    },
+    {
+      "id": 35,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T09:00:09.455056"
+    },
+    {
+      "id": 36,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T09:00:09.455742"
+    },
+    {
+      "id": 37,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T09:06:31.151402"
+    },
+    {
+      "id": 38,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T09:06:31.152068"
+    },
+    {
+      "id": 39,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T12:50:23.037564"
+    },
+    {
+      "id": 40,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T12:50:23.038246"
+    },
+    {
+      "id": 41,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:16:53.465490"
+    },
+    {
+      "id": 42,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:16:53.465961"
+    },
+    {
+      "id": 43,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:23:26.923021"
+    },
+    {
+      "id": 44,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:23:26.923738"
+    },
+    {
+      "id": 45,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:31:37.276692"
+    },
+    {
+      "id": 46,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T14:31:37.277368"
+    },
+    {
+      "id": 47,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:01:36.763238"
+    },
+    {
+      "id": 48,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:01:36.763923"
+    },
+    {
+      "id": 49,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:17:50.628786"
+    },
+    {
+      "id": 50,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:17:50.629518"
+    },
+    {
+      "id": 51,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:21:42.559672"
+    },
+    {
+      "id": 52,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-14T15:21:42.560405"
+    },
+    {
+      "id": 53,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T08:20:24.218166"
+    },
+    {
+      "id": 54,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T08:20:24.218651"
+    },
+    {
+      "id": 55,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T09:55:38.024198"
+    },
+    {
+      "id": 56,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T09:55:38.024699"
+    },
+    {
+      "id": 57,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:44:13.293884"
+    },
+    {
+      "id": 58,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:44:13.294626"
+    },
+    {
+      "id": 59,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:57:55.917162"
+    },
+    {
+      "id": 60,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:57:55.917879"
+    },
+    {
+      "id": 61,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:58:14.484060"
+    },
+    {
+      "id": 62,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T10:58:14.484772"
+    },
+    {
+      "id": 63,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T14:27:27.245088"
+    },
+    {
+      "id": 64,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T14:27:27.245817"
+    },
+    {
+      "id": 65,
+      "name": "电力工程施工总承包",
+      "level": "三级",
+      "cert_no": "D242010979",
+      "valid_until": "2028-12-31",
+      "cert_file": "",
+      "created_at": "2026-02-24T15:41:47.297522"
+    },
+    {
+      "id": 66,
+      "name": "承装（修、试）电力设施许可证",
+      "level": "四级",
+      "cert_no": "6-1-00357-2018",
+      "valid_until": "2027-06-30",
+      "cert_file": "",
+      "created_at": "2026-02-24T15:41:47.298254"
+    }
+  ],
+  "certificates": [
+    {
+      "id": 1,
+      "name": "SIEMENS授权合作企业",
+      "issuer": "西门子（中国）有限公司",
+      "valid_until": "2026-12-31",
+      "cert_file": "certificates/04、荣誉证书/22、SIVACON 8PT授权合作伙伴证书-海越湖北.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 2,
+      "name": "ABB授权合作伙伴",
+      "issuer": "ABB",
+      "valid_until": "",
+      "cert_file": "certificates/04、荣誉证书/27、MDmax ST 低压开关柜ABB许可开关柜合作伙伴证书.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 3,
+      "name": "西门子华中大区紧密合作伙伴",
+      "issuer": "西门子（中国）有限公司",
+      "valid_until": "",
+      "cert_file": "certificates/04、荣誉证书/23、西门子（中国）有限公司智能基础设施集团华中大区紧密合作伙伴证书.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 4,
+      "name": "SIBOARD西门子柜型授权合作伙伴",
+      "issuer": "西门子",
+      "valid_until": "",
+      "cert_file": "certificates/04、荣誉证书/28、SIBOARD西门子柜型授权合作伙伴证书-海越湖北 .pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    }
+  ],
+  "honors": [
+    {
+      "id": 1,
+      "name": "湖北省2023年省级重点项目",
+      "issuer": "湖北省政府",
+      "year": "2023",
+      "cert_file": "certificates/04、荣誉证书/01、湖北省二〇二三年省级重点项目证书.pdf",
+      "created_at": "2026-02-12T00:00:00.000000"
+    },
+    {
+      "id": 2,
+      "name": "中国质量奖",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/32、海越（湖北）电气股份有限公司中国质量奖证书.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 3,
+      "name": "海越湖北电气资信等级AAA级",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/12、海越（湖北）电气股份有限公司资信等级AAA级证书.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 4,
+      "name": "AAA级诚信经营示范单位",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/13、海越（湖北）电气股份有限公司AAA级诚信经营示范单位证书 .pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 5,
+      "name": "AAA级信用企业",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/14、海越（湖北）电气股份有限公司AAA级信用企业 证书.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 6,
+      "name": "AAA级重合同守信用企业",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/18、海越（湖北）电气股份有限公司AAA级重合同守信用企业证书 .pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    },
+    {
+      "id": 7,
+      "name": "智能工厂授牌",
+      "issuer": "",
+      "year": "",
+      "cert_file": "certificates/04、荣誉证书/04、智能工厂授牌-牌匾.pdf",
+      "created_at": "2026-02-13T00:00:00.000000"
+    }
+  ]
+}
