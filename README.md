@@ -2,6 +2,23 @@
 
 > 基于AI的智能投标文件生成工具
 
+[![GitHub Stars](https://img.shields.io/badge/Stars-yellow?style=flat-square)](https://github.com/ZhangDongfang2006/bid-generator)
+[![License](https://img.shields.io/badge/License-Internal%20Use-red?style=flat-square)](#)
+
+---
+
+## 📋 目录
+
+- [快速开始](#快速开始)
+- [系统功能](#系统功能)
+- [程序架构](#程序架构)
+- [技术栈](#技术栈)
+- [Git 工作流程](#git-工作流程)
+- [GitHub 优势功能](#github-优势功能)
+- [其他同事如何使用](#其他同事如何使用)
+- [配置说明](#配置说明)
+- [常见问题](#常见问题)
+
 ---
 
 ## 快速开始
@@ -32,27 +49,407 @@ cd ~/workspace/bid-generator
 
 ---
 
-## 📋 系统功能
+## 系统功能
 
-### ✅ 核心功能
+### 核心功能
 - 📄 **自动解析**：支持PDF和Word格式的招标文件
-- 🔗 **智能匹配**：自动匹配公司资质、案例、产品
-- 📊 **资料管理**：统一管理公司数据库
-- 🚀 **快速生成**：一键生成投标文件（Word格式）
-- 💾 **本地部署**：数据安全，本地运行
+  - PDF 文件解析（PyPDF2）
+  - Word (.docx) 文件解析（python-docx）
+  - Word (.doc) 文件解析（antiword 自动转换为 .docx）
 
-### 📊 已加载资料
+- 🔗 **智能匹配**：自动匹配公司资质、案例、产品
+  - 基于关键词的智能匹配
+  - 支持模糊匹配和分类筛选
+
+- 📊 **资料管理**：统一管理公司数据库
+  - 资质证书管理（含图片转换）
+  - 项目案例管理
+  - 产品信息管理
+  - 人员信息管理
+
+- 🚀 **快速生成**：一键生成投标文件（Word格式）
+  - 技术标和商务标分开生成
+  - 证书图片自动插入
+  - 格式规范化
+
+- 💾 **本地部署**：数据安全，本地运行
+  - 无需联网即可使用
+  - 数据存储在本地
+  - 支持局域网共享
+
+### 已加载资料
 
 | 类别 | 数量 | 说明 |
 |------|------|------|
-| 资质证书 | 11项 | 含质量、环境、安全认证等 |
+| 资质证书 | 64项 | 含质量、环境、安全、能源认证及型式试验报告等 |
 | 产品信息 | 15项 | 高低压开关柜、预制舱等 |
 | 业绩案例 | 20项 | 覆盖14个行业，2019-2025年 |
 | 人员信息 | 待更新 | 需补充人员资料 |
 
 ---
 
-## 👥 其他同事如何使用
+## 程序架构
+
+### 整体架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Web 界面层 (app.py)                    │
+│                  Streamlit 应用入口                          │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+        ┌────────────┼────────────┐
+        │            │            │
+        ▼            ▼            ▼
+┌──────────────┐ ┌──────────┐ ┌──────────────┐
+│ 解析模块     │ │ 生成模块  │ │ 数据库模块   │
+│ (parser.py)  │ │(generator│ │ (database.py)│
+│              │ │   .py)   │ │              │
+└──────────────┘ └──────────┘ └──────────────┘
+        │            │            │
+        ▼            ▼            ▼
+┌──────────────┐ ┌──────────┐ ┌──────────────┐
+│ PDF/Word     │ │ Word     │ │ JSON 数据库  │
+│ 文件解析     │ │ 文档生成 │ │ (data/*.json) │
+└──────────────┘ └──────────┘ └──────────────┘
+        │            │
+        ▼            ▼
+┌──────────────┐ ┌──────────┐
+│ Ghostscript  │ │ python-  │
+│ (PDF转图片)  │ │ docx     │
+└──────────────┘ └──────────┘
+```
+
+### 核心模块说明
+
+#### 1. app.py - Web 应用入口
+- **功能**：Streamlit 应用主程序，提供 Web 界面
+- **主要功能**：
+  - 文件上传和解析
+  - 资料管理界面
+  - 投标文件生成
+  - 调试模式
+
+#### 2. parser.py - 招标文件解析模块
+- **功能**：解析 PDF 和 Word 格式的招标文件
+- **主要方法**：
+  - `parse_file(filepath)` - 主解析方法
+  - `_parse_pdf(filepath)` - PDF 文件解析
+  - `_parse_docx(filepath)` - Word (.docx) 文件解析
+  - `_parse_doc(filepath)` - Word (.doc) 文件解析（转换为 .docx）
+- **依赖**：PyPDF2, python-docx, antiword
+
+#### 3. generator.py - 投标文件生成模块
+- **功能**：生成 Word 格式的投标文件
+- **主要方法**：
+  - `generate_bid()` - 生成单一投标文件
+  - `generate_separate_bids()` - 生成技术标和商务标分开的文件
+  - `_add_qualifications_with_pdf_images()` - 添加证书图片
+- **依赖**：python-docx, pdf2image, Pillow
+
+#### 4. database.py - 数据库管理模块
+- **功能**：管理公司资质、案例、产品、人员数据
+- **主要方法**：
+  - `get_qualifications()` - 获取资质证书列表
+  - `get_cases()` - 获取项目案例列表
+  - `get_products()` - 获取产品信息列表
+  - `get_personnel()` - 获取人员信息列表
+  - `match_qualifications(requirements)` - 智能匹配资质
+- **数据存储**：JSON 文件（data/qualifications.json 等）
+
+#### 5. pdf_to_image_service.py - PDF 转图片服务
+- **功能**：将 PDF 文件转换为图片
+- **主要方法**：
+  - `convert_pdf_to_images()` - 批量转换 PDF
+- **依赖**：pdf2image, Pillow, Ghostscript, poppler
+
+### 数据流
+
+```
+用户上传招标文件
+    ↓
+parser.py 解析文件内容
+    ↓
+database.py 智能匹配资质、案例、产品
+    ↓
+generator.py 生成 Word 文档
+    ↓
+pdf_to_image_service.py 转换证书为图片（如需要）
+    ↓
+插入图片到文档
+    ↓
+用户下载生成的投标文件
+```
+
+---
+
+## 技术栈
+
+### 后端框架
+- **Streamlit**：Web 应用框架
+- **Python**：3.9+
+
+### 核心库
+- **PyPDF2**：PDF 文件解析
+- **python-docx**：Word (.docx) 文件读写
+- **antiword**：Word (.doc) 文件转换
+- **pdf2image**：PDF 转图片
+- **Pillow**：图片处理
+
+### 工具
+- **Ghostscript**：PDF 处理引擎
+- **poppler**：PDF 渲染库
+
+### 版本控制
+- **Git**：版本控制
+- **GitHub**：代码托管
+- **GitHub CLI**：命令行工具
+
+---
+
+## Git 工作流程
+
+### 推荐工作流程
+
+#### 1. 开发新功能前
+```bash
+# 拉取最新代码
+git pull origin main
+
+# 创建新分支
+git checkout -b feature/新功能名称
+```
+
+#### 2. 开发中
+```bash
+# 查看修改
+git status
+
+# 暂存修改的文件
+git add 文件名
+
+# 提交修改
+git commit -m "类型: 简短描述
+
+详细说明本次修改的目的和内容
+
+- 修改1
+- 修改2
+
+相关 Issue: #123"
+
+# 推送分支到远程
+git push -u origin feature/新功能名称
+```
+
+#### 3. 完成后
+```bash
+# 切换回主分支
+git checkout main
+
+# 合并分支
+git merge feature/新功能名称
+
+# 推送到远程
+git push origin main
+
+# 删除本地分支
+git branch -d feature/新功能名称
+
+# 删除远程分支
+git push origin --delete feature/新功能名称
+```
+
+### Commit 消息规范
+
+使用以下前缀标识提交类型：
+
+| 前缀 | 说明 | 示例 |
+|------|------|------|
+| `feat:` | 新功能 | `feat: 添加证书图片显示功能` |
+| `fix:` | 修复问题 | `fix: 修复 pdf2image 参数错误` |
+| `docs:` | 文档更新 | `docs: 更新 README.md` |
+| `style:` | 代码格式 | `style: 统一代码缩进` |
+| `refactor:` | 重构 | `refactor: 优化数据库查询逻辑` |
+| `perf:` | 性能优化 | `perf: 减少 PDF 解析时间` |
+| `test:` | 测试相关 | `test: 添加证书转换测试` |
+| `chore:` | 构建/工具 | `chore: 更新依赖库` |
+
+### 更新日志
+
+每次重要更新后，更新 `CHANGELOG.md`：
+
+```markdown
+## [版本号] - YYYY-MM-DD
+
+### 新增 ✨
+- 新功能描述
+
+### 优化 🚀
+- 优化描述
+
+### 修复 🐛
+- 修复描述
+
+### 依赖 🔧
+- 依赖变更
+```
+
+### 版本号发布
+
+```bash
+# 更新版本号（在相关文件中）
+git commit -am "release: 发布版本 x.y.z"
+git tag -a v.x.y.z -m "版本说明"
+git push --tags
+```
+
+---
+
+## GitHub 优势功能
+
+### 1. Issues（问题追踪）
+**用途**：追踪 bug、功能请求、任务
+
+**示例**：
+```markdown
+**标题**：修复证书图片不显示问题
+
+**问题描述**：
+生成的投标文件中没有显示证书图片
+
+**复现步骤**：
+1. 上传招标文件
+2. 勾选"显示证书图片"选项
+3. 生成投标文件
+4. 打开文档查看
+
+**期望行为**：
+证书图片应该显示在第3章（企业资质）
+
+**实际行为**：
+没有显示任何图片
+
+**环境信息**：
+- 系统：macOS
+- Python 版本：3.9
+- 相关依赖：pdf2image 1.17.0, Pillow 9.0.0
+
+**附加信息**：
+截图、日志文件等
+```
+
+**使用命令**：
+```bash
+# 创建 Issue
+gh issue create --title "标题" --body "描述"
+
+# 列出 Issues
+gh issue list
+
+# 查看 Issue
+gh issue view 123
+```
+
+### 2. Pull Requests（PR）
+**用途**：代码审查、合并分支
+
+**使用命令**：
+```bash
+# 创建 PR
+gh pr create --title "标题" --body "描述"
+
+# 列出 PRs
+gh pr list
+
+# 查看和合并 PR
+gh pr view 123
+gh pr merge 123 --merge
+```
+
+### 3. Actions（CI/CD）
+**用途**：自动化测试、部署
+
+**推荐工作流**：
+- 自动运行测试
+- 代码质量检查
+- 自动部署
+
+**配置文件**：`.github/workflows/ci.yml`
+
+```yaml
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          python -m pytest tests/
+```
+
+### 4. Projects（项目管理）
+**用途**：看板管理、任务跟踪
+
+**推荐使用场景**：
+- 待办事项
+- 进行中的任务
+- 已完成的任务
+- 功能规划
+
+### 5. Wiki（文档）
+**用途**：详细文档、教程
+
+**推荐文档**：
+- 部署指南
+- 开发指南
+- API 文档
+- 常见问题
+
+### 6. Releases（版本发布）
+**用途**：发布版本、下载安装包
+
+**使用命令**：
+```bash
+# 创建 Release
+gh release create v1.0.0 --notes "版本说明"
+
+# 列出 Releases
+gh release list
+```
+
+### 7. GitHub Pages（静态网站）
+**用途**：托管项目网站、文档
+
+**配置**：
+1. 在 `Settings` → `Pages` 中启用
+2. 选择分支（如 `gh-pages`）
+3. 访问 `https://zhangdongfang2006.github.io/bid-generator/`
+
+### 8. Security（安全）
+**用途**：
+- Dependabot（依赖安全提醒）
+- Code scanning（代码扫描）
+- Secret scanning（密钥扫描）
+
+**推荐设置**：
+- 启用 Dependabot 自动更新依赖
+- 配置 Secret scanning 防止密钥泄露
+
+---
+
+## 其他同事如何使用
 
 ### 方案1：单机使用（每人独立）
 
@@ -80,68 +477,7 @@ cd ~/workspace/bid-generator
 
 ---
 
-## 📚 文档说明
-
-| 文件 | 说明 |
-|------|------|
-| `QUICKSTART.md` | 快速启动指南 |
-| `用户使用手册.md` | 详细使用教程（推荐新用户阅读） |
-| `README.md` | 本文件 - 项目概述 |
-| `app.py` | 主程序 |
-| `generator.py` | 投标文件生成模块 |
-| `database.py` | 数据库管理模块 |
-| `parser.py` | 招标文件解析模块 |
-
----
-
-## 📁 数据目录说明
-
-```
-data/
-├── qualifications.json  # 资质证书数据
-├── cases.json          # 项目案例数据
-├── products.json       # 产品信息数据
-├── personnel.json      # 人员信息数据
-└── UPDATE_LOG.md       # 数据更新日志
-```
-
----
-
-## 💾 数据同步
-
-### 单机模式的数据同步
-
-**项目负责人 → 其他同事**
-```bash
-# 项目负责人导出数据
-tar -czf data_backup_$(date +%Y%m%d).tar.gz data/
-
-# 通过网盘/邮件/共享文件夹分享给其他同事
-# 其他同事解压覆盖本地 data/ 目录
-tar -xzf data_backup_20240212.tar.gz
-```
-
-**其他同事 → 项目负责人**
-```bash
-# 其他同事打包自己的数据
-tar -czf my_data.tar.gz data/
-
-# 发送给项目负责人，项目负责人合并更新
-```
-
-### 局域网模式的数据共享
-
-局域网模式下，所有同事共享同一套数据，无需同步。
-但建议定期备份：
-
-```bash
-# 每周备份一次
-cp -r data ~/Documents/bid_generator_backup_$(date +%Y%m%d)
-```
-
----
-
-## 🔧 配置说明
+## 配置说明
 
 ### 修改公司信息
 
@@ -174,7 +510,7 @@ QUOTE_CONFIG = {
 
 ---
 
-## ❓ 常见问题
+## 常见问题
 
 ### Q: 我不是技术人员，如何使用？
 
@@ -212,30 +548,24 @@ A:
 
 ---
 
+## 📁 文档说明
+
+| 文件 | 说明 |
+|------|------|
+| `README.md` | 本文件 - 项目概述和架构说明 |
+| `CHANGELOG.md` | 更新日志 |
+| `QUICKSTART.md` | 快速启动指南 |
+| `用户使用手册.md` | 详细使用教程（推荐新用户阅读） |
+| `PROJECT_SUMMARY.md` | 项目总结 |
+| `排错指南.md` | 常见问题排错指南 |
+
+---
+
 ## 📞 技术支持
 
 - **邮箱**：gl@haiyueelec.com
 - **电话**：0712-8303989
 - **网址**：www.haiyueelec.com
-
----
-
-## 📝 更新日志
-
-### v2.0 (2026-02-12)
-- ✅ 添加海越湖北电气完整资料
-- ✅ 更新资质证书（11项）
-- ✅ 更新产品信息（15项）
-- ✅ 更新业绩案例（20项）
-- ✅ 创建局域网启动脚本
-- ✅ 编写详细使用手册
-- ⏳ 人员信息待更新（等待资料）
-
-### v1.0 (2026-02-11)
-- ✅ 初始版本发布
-- ✅ 基础投标文件生成功能
-- ✅ 资料管理系统
-- ✅ 招标文件解析功能
 
 ---
 
