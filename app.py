@@ -53,7 +53,7 @@ parser = TenderParser(data_dir)
 templates_dir = Path(__file__).parent / "templates"
 output_dir = Path("output")
 output_dir.mkdir(exist_ok=True)
-generator = BidGenerator(templates_dir, output_dir)
+generator = BidGenerator(templates_dir, output_dir, image_width_inches=5.5)
 
 # ==================== 会话状态 ====================
 
@@ -69,12 +69,6 @@ if 'parse_result' not in st.session_state:
 
 if 'bid_generated' not in st.session_state:
     st.session_state.bid_generated = False
-
-if 'preview_doc_bytes' not in st.session_state:
-    st.session_state.preview_doc_bytes = None
-
-if 'preview_available' not in st.session_state:
-    st.session_state.preview_available = False
 
 if 'active_page' not in st.session_state:
     st.session_state.active_page = 'main'
@@ -104,11 +98,6 @@ with st.sidebar:
 # 主内容区
 if st.session_state.get('active_page') == 'data_management':
     st.title("📊 资料管理")
-    
-    # 返回按钮
-    if st.button("⬅️ 返回首页", use_container_width=True):
-        st.session_state.active_page = 'main'
-        st.rerun()
     
     st.markdown("---")
     st.markdown("请在本地文件系统中管理以下目录中的内容：")
@@ -295,16 +284,24 @@ else:
             st.caption("勾选后，将生成两个独立的文件")
         
         with col2:
-            preview_first = st.checkbox("生成前预览（推荐）", value=True, key="preview_first")
-            st.caption("勾选后，先生成预览版本，再确认下载正式版本")
+            # 添加图片大小调节
+            image_width = st.slider(
+                "证书图片大小",
+                min_value=3.0,
+                max_value=7.0,
+                value=5.5,
+                step=0.5,
+                help="调整证书图片的大小（3.0-7.0 英寸）"
+            )
+            st.caption(f"当前设置：{image_width} 英寸（约{image_width*2.54:.1f} 厘米）")
         
         # 生成按钮
         if st.button("🚀 生成投标文件", type="primary", key="generate_bid"):
             try:
-                st.info("🔄 正在生成投标文件...")
+                st.info("🔄 正在生成正式版本投标文件...")
                 
                 # 更新 tender_info
-                st.session_state.tender_info['show_cert_images'] = True  # 默认启用证书图片
+                st.session_state.tender_info['show_cert_images'] = True
                 st.session_state.tender_info['generate_time'] = datetime.now().isoformat()
                 
                 # 准备匹配数据
@@ -313,50 +310,37 @@ else:
                 # 调试信息
                 st.write(f"生成信息：")
                 st.write(f"  - 显示证书图片：是（默认启用）")
+                st.write(f"  - 图片大小：{image_width} 英寸")
                 st.write(f"  - 匹配资质：{len(matched_data.get('qualifications', []))}")
                 st.write(f"  - 匹配案例：{len(matched_data.get('cases', []))}")
                 st.write(f"  - 匹配产品：{len(matched_data.get('products', []))}")
                 
                 if separate_bids:
                     # 生成技术标和商务标分开
-                    if preview_first:
-                        # 生成预览版本（简化内容）
-                        output_paths = generator.generate_separate_bids_preview(
-                            st.session_state.tender_info,
-                            config.COMPANY_INFO,
-                            matched_data
-                        )
-                        st.success("✅ 预览文件生成成功！")
-                        st.session_state.preview_available = True
-                    else:
-                        # 生成完整版本
-                        output_paths = generator.generate_separate_bids(
-                            st.session_state.tender_info,
-                            config.COMPANY_INFO,
-                            matched_data
-                        )
-                        st.success("✅ 投标文件生成成功！")
-                        st.session_state.bid_generated = True
+                    # 更新生成器使用新的图片大小
+                    generator = BidGenerator(templates_dir, output_dir, image_width_inches=image_width)
+                    
+                    output_paths = generator.generate_separate_bids(
+                        st.session_state.tender_info,
+                        config.COMPANY_INFO,
+                        matched_data,
+                        show_cert_images=True
+                    )
+                    st.success("✅ 投标文件生成成功！")
+                    st.session_state.bid_generated = True
                 else:
                     # 生成单一文件
-                    if preview_first:
-                        # 生成预览版本
-                        output_path = generator.generate_bid_preview(
-                            st.session_state.tender_info,
-                            config.COMPANY_INFO,
-                            matched_data
-                        )
-                        st.success("✅ 预览文件生成成功！")
-                        st.session_state.preview_available = True
-                    else:
-                        # 生成完整版本
-                        output_path = generator.generate_bid(
-                            st.session_state.tender_info,
-                            config.COMPANY_INFO,
-                            matched_data
-                        )
-                        st.success("✅ 投标文件生成成功！")
-                        st.session_state.bid_generated = True
+                    # 更新生成器使用新的图片大小
+                    generator = BidGenerator(templates_dir, output_dir, image_width_inches=image_width)
+                    
+                    output_path = generator.generate_bid(
+                        st.session_state.tender_info,
+                        config.COMPANY_INFO,
+                        matched_data,
+                        show_cert_images=True
+                    )
+                    st.success("✅ 投标文件生成成功！")
+                    st.session_state.bid_generated = True
                 
                 # 显示下载链接
                 if separate_bids:
@@ -397,131 +381,6 @@ else:
                 st.error(f"❌ 生成失败：{e}")
                 st.markdown(f"**错误详情**：{str(e)}")
     
-    # 第四步：预览投标文件
-    if st.session_state.preview_available:
-        st.markdown("---")
-        st.header("👁 第四步：预览投标文件")
-        st.markdown("查看预览版本的文件信息，确认无误后下载正式版本")
-        
-        # 读取生成的文件
-        output_dir = Path("output")
-        if output_dir.exists():
-            files = list(output_dir.glob("*预览*.docx"))
-            
-            if files:
-                latest_file = max(files, key=lambda f: f.stat().st_mtime)
-                
-                # 显示文件信息
-                st.markdown("### 📄 文件信息")
-                col1, col2, col3 = st.columns(3)
-                
-                with col1:
-                    st.metric("文件名", latest_file.name)
-                
-                with col2:
-                    file_size = latest_file.stat().st_size / 1024  # KB
-                    st.metric("文件大小", f"{file_size:.1f} KB")
-                
-                with col3:
-                    mtime = datetime.fromtimestamp(latest_file.stat().st_mtime)
-                    st.metric("生成时间", mtime.strftime("%H:%M:%S"))
-                
-                st.markdown("---")
-                
-                # 在浏览器中预览文档内容
-                st.markdown("### 📄 文档内容预览")
-                
-                try:
-                    from docx import Document
-                    doc = Document(str(latest_file))
-                    
-                    # 显示文档内容
-                    for i, para in enumerate(doc.paragraphs):
-                        if para.text.strip():
-                            # 跳过目录行
-                            if "目录" in para.text:
-                                continue
-                            
-                            # 根据文本类型决定显示方式
-                            if i < 10:  # 前10段作为标题
-                                st.markdown(f"**{para.text}**")
-                            else:  # 其余作为正文
-                                st.text(para.text)
-                        
-                        if i > 50:  # 只显示前50段
-                            st.info("...（更多内容请下载完整文件查看）")
-                            break
-                
-                except Exception as e:
-                    st.error(f"预览失败：{e}")
-                
-                st.markdown("---")
-                
-                # 下载选项
-                st.markdown("### 📥 下载选项")
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    # 下载预览版本
-                    with open(latest_file, 'rb') as f:
-                        st.download_button(
-                            label="📥 下载预览版本",
-                            data=f,
-                            file_name=latest_file.name,
-                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            help="预览版本只包含摘要信息"
-                        )
-                
-                with col2:
-                    # 确认下载正式版本
-                    if st.button("✅ 生成并下载正式版本", type="primary", key="generate_final"):
-                        try:
-                            st.info("🔄 正在生成正式版本...")
-                            
-                            # 从 session state 获取匹配数据
-                            matched_data = st.session_state.matched_data
-                            
-                            if separate_bids:
-                                # 生成正式的技术标和商务标
-                                output_paths = generator.generate_separate_bids(
-                                    st.session_state.tender_info,
-                                    config.COMPANY_INFO,
-                                    matched_data
-                                )
-                                st.success("✅ 正式版本生成成功！")
-                                st.session_state.bid_generated = True
-                                st.rerun()
-                            else:
-                                # 生成正式的单一投标文件
-                                output_path = generator.generate_bid(
-                                    st.session_state.tender_info,
-                                    config.COMPANY_INFO,
-                                    matched_data
-                                )
-                                st.success("✅ 正式版本生成成功！")
-                                st.session_state.bid_generated = True
-                                st.rerun()
-                        except Exception as e:
-                            st.error(f"❌ 生成失败：{e}")
-            else:
-                st.info("⚠️ 未找到预览文件")
-            
-            st.markdown("---")
-            
-            # 说明
-            st.markdown("### 💡 使用说明")
-            st.markdown("""
-            **预览版本 vs 正式版本**：
-            - **预览版本**：只包含摘要信息（前3-5项），生成速度快
-            - **正式版本**：包含完整内容和所有匹配的数据
-            
-            **建议流程**：
-            1. 在上方预览文档内容
-            2. 确认无误后，点击"生成并下载正式版本"
-            3. 下载完整的正式版本投标文件
-            """)
-    
     # 第五步：下载投标文件
     if st.session_state.bid_generated:
         st.markdown("---")
@@ -529,7 +388,6 @@ else:
         
         # 显示生成状态
         st.markdown(f"**生成时间**: {st.session_state.tender_info.get('generate_time', 'N/A')}")
-        st.markdown(f"**是否正式版本**: {'是' if st.session_state.tender_info.get('is_final') else '预览版本'}")
         
         # 查找生成的文件
         output_dir = Path("output")
@@ -567,13 +425,17 @@ else:
     st.markdown("---")
     st.markdown("### ℹ️ 使用说明")
     st.markdown("""
-    1. 上传招标文件（PDF/Word）
+    1. 上传招标文件（支持多个文件，PDF/Word）
     2. 查看AI解析置信度
     3. 校验提取的需求
     4. 查看智能匹配结果
-    5. 生成投标文件
-    6. 在浏览器中预览（推荐）
-    7. 下载正式版本
+    5. 生成投标文件（包含目录、页码）
+    6. 下载生成的投标文件
+    
+    **新功能说明**：
+    - **目录**：自动生成投标文件目录
+    - **页码**：每页底部自动添加页码
+    - **图片大小**：可调节证书图片大小（3-7 英寸）
     
     **注意事项**：
     - 生成的投标文件为Word格式

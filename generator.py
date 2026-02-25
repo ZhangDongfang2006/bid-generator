@@ -46,9 +46,10 @@ except ImportError as e:
 class BidDocumentGenerator:
     """投标文件生成器 - V2 (PDF转图片版）"""
 
-    def __init__(self, templates_dir: Path, output_dir: Path):
+    def __init__(self, templates_dir: Path, output_dir: Path, image_width_inches: float = 5.5):
         self.templates_dir = templates_dir
         self.output_dir = output_dir
+        self.image_width_inches = image_width_inches  # 可调节的图片宽度（英寸）
 
     def generate_bid(self, tender_info: Dict, company_info: Dict,
                     matched_data: Dict, quote_data: Dict = None,
@@ -71,6 +72,7 @@ class BidDocumentGenerator:
 
         # 生成各个章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="投标文件")
+        self._add_table_of_contents(doc)  # 新增：添加目录
         self._add_company_proof(doc, company_info)
         self._add_bid纲领_v2(doc, company_info, tender_info)
         self._add_deviation_table(doc, tender_info, table_type="技术")
@@ -80,6 +82,9 @@ class BidDocumentGenerator:
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
         self._add_performance(doc, matched_data.get("cases", []))
         self._add_after_sales(doc, company_info)
+
+        # 设置页码
+        self._setup_page_numbers(doc)
 
         # 保存文件
         project_name = tender_info.get("project_info", {}).get("project_name", "未知项目")
@@ -855,7 +860,7 @@ class BidDocumentGenerator:
             for img_path in images:
                 try:
                     doc.add_paragraph()  # 空行
-                    doc.add_picture(str(img_path), width=Inches(5.5))  # 宽度5.5英寸
+                    doc.add_picture(str(img_path), width=Inches(self.image_width_inches))  # 宽度5.5英寸
                     doc.add_paragraph()  # 空行
                 except Exception as e:
                     doc.add_paragraph(f"  （图片插入失败: {e}）")
@@ -891,7 +896,7 @@ class BidDocumentGenerator:
             for img_path in images:
                 try:
                     doc.add_paragraph()
-                    doc.add_picture(str(img_path), width=Inches(5.5))
+                    doc.add_picture(str(img_path), width=Inches(self.image_width_inches))
                     doc.add_paragraph()
                 except:
                     doc.add_paragraph(f"  （图片插入失败）")
@@ -926,7 +931,7 @@ class BidDocumentGenerator:
             for img_path in images:
                 try:
                     doc.add_paragraph()
-                    doc.add_picture(str(img_path), width=Inches(5.5))
+                    doc.add_picture(str(img_path), width=Inches(self.image_width_inches))
                     doc.add_paragraph()
                 except:
                     doc.add_paragraph(f"  （图片插入失败）")
@@ -956,7 +961,7 @@ class BidDocumentGenerator:
             for img_path in images:
                 try:
                     doc.add_paragraph()
-                    doc.add_picture(str(img_path), width=Inches(5.5))
+                    doc.add_picture(str(img_path), width=Inches(self.image_width_inches))
                     doc.add_paragraph()
                 except:
                     doc.add_paragraph(f"  （图片插入失败）")
@@ -993,7 +998,7 @@ class BidDocumentGenerator:
                 for img_path in images:
                     try:
                         doc.add_paragraph()
-                        doc.add_picture(str(img_path), width=Inches(5.5))
+                        doc.add_picture(str(img_path), width=Inches(self.image_width_inches))
                         doc.add_paragraph()
                     except Exception as e:
                         doc.add_paragraph(f"  （图片插入失败: {e}）")
@@ -1317,6 +1322,84 @@ class BidDocumentGenerator:
             doc.add_paragraph(commitment)
 
         doc.add_page_break()
+
+    def _add_table_of_contents(self, doc: Document):
+        """添加目录"""
+        doc.add_page_break()
+        
+        # 添加目录标题
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run("目录")
+        run.bold = True
+        run.font.size = Pt(20)
+        run.font.name = "黑体"
+
+        doc.add_paragraph()
+
+        # 添加目录内容
+        contents = [
+            ("1.", "公司概况", "2"),
+            ("1.1", "公司简介", "2"),
+            ("1.2", "公司资质", "2"),
+            ("1.3", "公司业绩", "2"),
+            ("2.", "投标纲领", "3"),
+            ("2.1", "技术偏离表", "3"),
+            ("2.2", "商务偏离表", "3"),
+            ("3.", "技术方案", "4"),
+            ("3.1", "项目理解", "4"),
+            ("3.2", "技术方案", "4"),
+            ("3.3", "项目团队", "4"),
+            ("4.", "资质证书", "5"),
+            ("5.", "项目案例", "6"),
+            ("6.", "报价说明", "7"),
+            ("7.", "售后服务", "8"),
+            ("8.", "承诺", "9"),
+        ]
+
+        # 创建表格形式的目录
+        table = doc.add_table(rows=0, cols=3)
+        table.style = 'Table Grid'
+
+        for seq, title, page in contents:
+            row = table.add_row()
+            row.cells[0].text = seq
+            row.cells[1].text = title
+            row.cells[2].text = page
+
+        doc.add_page_break()
+
+    def _setup_page_numbers(self, doc: Document):
+        """设置页码和页面边距"""
+        # 获取文档节
+        for section in doc.sections:
+            # 设置页边距
+            section.left_margin = Cm(2.54)   # 左边距 2.54cm
+            section.right_margin = Cm(2.54)  # 右边距 2.54cm
+            section.top_margin = Cm(2.54)    # 上边距 2.54cm
+            section.bottom_margin = Cm(2.54) # 下边距 2.54cm
+
+            # 设置页眉和页脚
+            header = section.header
+            footer = section.footer
+
+            # 在页脚添加页码
+            footer_para = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+            footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            
+            # 添加页码文本
+            footer_para.add_run("- 第 ").font.size = Pt(10)
+            footer_para.add_run("  ").font.size = Pt(10)
+
+            # 添加页码域（使用 XML 方式）
+            run = footer_para.add_run()
+            run.font.size = Pt(10)
+            
+            # 使用 XML 添加页码域
+            fldChar = OxmlElement('w:fldSimple')
+            fldChar.set(qn('w:instr'), 'PAGE')
+            
+            run._r.addnext(fldChar)
 
 
 # 测试代码
