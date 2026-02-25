@@ -9,4 +9,4 @@ python-dotenv==1.0.1
 reportlab==4.2.0
 Pillow==10.4.0
 fuzzywuzzy==0.18.0
-python-Levenshtein==0.25.1
+python-Levenshtein==0.27.3
