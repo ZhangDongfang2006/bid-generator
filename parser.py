@@ -191,6 +191,7 @@ class TenderParser:
     def _extract_requirements_from_text(self, text: str) -> List[str]:
         """从文本中提取需求"""
         requirements = []
+        seen = set()  # 用于去重
         
         # 定义需求关键词
         requirement_keywords = [
@@ -203,43 +204,72 @@ class TenderParser:
             "保修", "质保", "服务", "售后",
             "金额", "价格", "报价", "费用",
             "质量", "安全", "环保", "环境",
-            "工期", "时间", "交付", "完工"
-            "文件", "报告", "检测", "测试"
-            "图纸", "设计", "方案", "技术方案"
-            "验收", "标准", "规范", "条件",
-            "证书编号", "证书等级", "有效期", "至",
-            "注册资金", "注册资本", "营业额"
+            "工期", "时间", "交付", "完工",
+            "文件", "报告", "检测", "测试",
+            "图纸", "设计", "方案",
+            "验收", "规范", "条件",
+            "证书编号", "证书等级", "有效期",
+            "注册资金", "注册资本", "营业额",
             "ISO", "9001", "CCC", "CE"
         ]
         
-        # 分割文本为段落和句子
+        # 定义需要过滤的无意义内容模式
+        filter_patterns = [
+            r'^[一二三四五六七八九十]+[、\.]',  # 序号
+            r'^\d+[、\.]',  # 数字序号
+            r'^\d+\.\d+\.\d+\.\d+',  # IP地址
+            r'^\d{4}-\d{2}-\d{2}',  # 日期
+            r'^\d{11}$',  # 电话号码
+            r'^\w+@\w+\.\w+$',  # 邮箱
+            r'^http',  # URL
+            r'^www',  # URL
+            r'^海越',  # 公司名称开头
+            r'^湖北',  # 地区名称开头
+            r'^电气',  # 公司名称开头
+            r'^公司',  # 公司名称
+            r'^招标文件',  # 文档类型
+            r'^投标文件',  # 文档类型
+            r'^技术文件',  # 文档类型
+        ]
+        
+        # 分割文本为段落
         paragraphs = text.split('\n')
         
         for paragraph in paragraphs:
             paragraph = paragraph.strip()
-            if not paragraph:
+            
+            # 跳过空行或太短的行
+            if not paragraph or len(paragraph) < 5:
+                continue
+            
+            # 跳过明显无意义的行
+            if any(re.match(pattern, paragraph) for pattern in filter_patterns):
                 continue
             
             # 提取包含关键词的句子
-            sentences = re.split(r'[。！？；]', paragraph)
+            sentences = re.split(r'[。！？；\n]', paragraph)
             
             for sentence in sentences:
                 sentence = sentence.strip()
-                if not sentence:
+                
+                # 跳过空行或太短的句子
+                if not sentence or len(sentence) < 5:
                     continue
+                
+                # 去除多余空白
+                sentence = ' '.join(sentence.split())
                 
                 # 检查是否包含需求关键词
                 has_requirement = any(keyword in sentence for keyword in requirement_keywords)
                 
                 if has_requirement:
-                    requirements.append(sentence)
-                    # 避免重复
-                    if len(requirements) > 20:  # 最多提取20个需求
-                        break
-            
-            # 如果段落本身就是一个需求
-            if len(requirements) <= 20 and any(keyword in paragraph for keyword in requirement_keywords):
-                requirements.append(paragraph)
+                    # 去重：只保留第一次出现的
+                    sentence_lower = sentence.lower()
+                    if sentence_lower not in seen:
+                        seen.add(sentence_lower)
+                        requirements.append(sentence)
+                        if len(requirements) >= 20:  # 最多提取20个需求
+                            break
             
             # 如果已经提取了足够的需求，停止
             if len(requirements) >= 20:

@@ -140,10 +140,15 @@ else:
         with open(temp_file, 'wb') as f:
             f.write(uploaded_file.getbuffer())
         
-        # 解析文件
-        st.info("🔄 正在解析文件...")
+        # 解析文件（使用 st.empty 控制显示）
+        parsing_status = st.empty()
+        parsing_status.info("🔄 正在解析文件...")
+        
         parse_result = parser.parse_file(temp_file)
         st.session_state.parse_result = parse_result
+        
+        # 清除解析状态
+        parsing_status.empty()
         
         # 显示解析结果
         st.markdown("---")
@@ -161,26 +166,23 @@ else:
         # 显示解析出的需求
         st.markdown(f"**提取需求**: {len(parse_result.requirements)}")
         
-        # 显示需求列表
-        with st.expander("📝 查看提取的需求", expanded=False):
-            for i, req in enumerate(parse_result.requirements, 1):
-                st.text(f"{i}. {req}")
-        
         # 提供人工校验
         st.markdown("---")
         st.subheader("🔍 人工校验")
-        st.markdown("如果解析结果有误，可以在下方修改：")
+        st.markdown("如果解析结果有误，可以在下方修改或添加需求：")
         
-        # 编辑需求
-        edited_requirements = []
-        for i, req in enumerate(parse_result.requirements, 1):
-            edited_req = st.text_area(
-                f"需求 {i}",
-                value=req,
-                key=f"req_edit_{i}",
-                height=50
-            )
-            edited_requirements.append(edited_req if edited_req else req)
+        # 编辑需求（使用大文本框，每个需求一行）
+        requirements_text = "\n".join(parse_result.requirements)
+        edited_text = st.text_area(
+            "需求列表（每行一个需求）",
+            value=requirements_text,
+            height=300,
+            help="每行一个需求，可以修改、添加或删除"
+        )
+        
+        # 将文本转换为列表
+        edited_requirements = [line.strip() for line in edited_text.split('\n') if line.strip()]
+        st.caption(f"共 {len(edited_requirements)} 个需求")
         
         # 更新session state
         st.session_state.tender_info['requirements'] = edited_requirements
@@ -254,10 +256,7 @@ else:
         st.markdown("---")
         st.header("🚀 第三步：生成投标文件")
         st.markdown("一键生成技术标和商务标（或合并文档）")
-        
-        # 显示证书图片选项
-        show_cert_images = st.checkbox("显示证书图片", value=True, key="show_cert_images")
-        st.caption("勾选后，生成的投标文件中将包含证书图片（PDF转图片）")
+        st.info("✅ 生成的投标文件中将自动包含证书图片")
         
         # 生成选项
         col1, col2 = st.columns(2)
@@ -276,7 +275,7 @@ else:
                 st.info("🔄 正在生成投标文件...")
                 
                 # 更新 tender_info
-                st.session_state.tender_info['show_cert_images'] = show_cert_images
+                st.session_state.tender_info['show_cert_images'] = True  # 默认启用证书图片
                 st.session_state.tender_info['generate_time'] = datetime.now().isoformat()
                 
                 # 准备匹配数据
@@ -284,7 +283,7 @@ else:
                 
                 # 调试信息
                 st.write(f"生成信息：")
-                st.write(f"  - 显示证书图片：{show_cert_images}")
+                st.write(f"  - 显示证书图片：是（默认启用）")
                 st.write(f"  - 匹配资质：{len(matched_data.get('qualifications', []))}")
                 st.write(f"  - 匹配案例：{len(matched_data.get('cases', []))}")
                 st.write(f"  - 匹配产品：{len(matched_data.get('products', []))}")
