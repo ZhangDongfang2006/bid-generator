@@ -13,7 +13,7 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 # 导入本地模块
 from parser import TenderParser, ParseResult
-from generator import BidGenerator
+from generator import BidDocumentGenerator as BidGenerator
 from database import CompanyDatabase
 import config
 
