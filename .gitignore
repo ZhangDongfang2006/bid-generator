@@ -9,7 +9,7 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
+eggs/
 lib/
 lib64/
 parts/
@@ -50,18 +50,9 @@ output/
 uploads/
 test-results/
 
-# Old test and fix files (should be ignored)
-add_certificates.py
-add_pdf_*.py
-fix_*.py
-generator_backup*.py
-generator_*.pdf
-pdf_to_image_solution.py
-auto_*.py
-modification_guide.py
-check_*.py
-patch_*.py
-proper_fix_*.py
-replace_*.py
-quick_*.py
-EOF
+# Data Protection
+# 真实数据目录（不会提交到 Git）
+data/
+
+# 示例数据（已提交到 Git，用于演示）
+!data/examples/

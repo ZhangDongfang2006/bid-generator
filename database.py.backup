@@ -26,25 +26,24 @@ class CompanyDatabase:
         # 根据模式选择数据目录
         if self.use_demo_data:
             self.base_dir = self.examples_dir
-            print("=" * 60)
+            print("=" * 50)
             print("📊 数据模式：示例数据（DEMO）")
-            print("=" * 60)
+            print("=" * 50)
             print("✓ 当前使用示例数据进行演示")
             print("✓ 不会加载真实公司数据")
             print("")
             print("💡 如需使用真实数据，请设置环境变量：")
             print("   export USE_DEMO_DATA=false")
             print("   或在 .env 文件中添加：USE_DEMO_DATA=false")
-            print("=" * 60)
+            print("=" * 50)
         else:
             self.base_dir = data_dir
-            print("=" * 60)
+            print("=" * 50)
             print("📊 数据模式：真实数据（PRODUCTION）")
-            print("=" * 60)
+            print("=" * 50)
             print("✓ 正在加载真实公司数据")
             print("✓ 资质、案例、产品、人员信息将全部加载")
-            print("✓ 此数据仅供内部使用，不应提交到代码仓库")
-            print("=" * 60)
+            print("=" * 50)
 
         # 设置数据文件路径
         self.qualification_file = self.base_dir / "qualifications.json"
@@ -55,6 +54,42 @@ class CompanyDatabase:
         # 初始化数据文件
         self._init_data_files()
 
+    def _init_data_files(self):
+        """初始化数据文件"""
+        if not self.qualification_file.exists():
+            self._save_json(self.qualification_file, {
+                "qualifications": [],
+                "certificates": [],
+                "honors": []
+            })
+
+        if not self.cases_file.exists():
+            self._save_json(self.cases_file, {
+                "cases": []
+            })
+
+        if not self.products_file.exists():
+            self._save_json(self.products_file, {
+                "products": [],
+                "prices": {}
+            })
+
+        if not self.personnel_file.exists():
+            self._save_json(self.personnel_file, {
+                "management": [],
+                "engineers": [],
+                "workers": []
+            })
+
+    def _load_json(self, filepath: Path) -> Dict:
+        """加载JSON文件"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading {filepath}: {e}")
+            return {}
+
     def _save_json(self, filepath: Path, data: Dict):
         """保存JSON文件"""
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -64,7 +99,8 @@ class CompanyDatabase:
 
     def get_qualifications(self) -> List[Dict]:
         """获取所有资质"""
-        return self._load_json(self.qualification_file).get("qualifications", [])
+        data = self._load_json(self.qualification_file)
+        return data.get("qualifications", [])
 
     def add_qualification(self, name: str, level: str, cert_no: str,
                           valid_until: str, cert_file: str = ""):
@@ -89,8 +125,10 @@ class CompanyDatabase:
 
         for q in qualifications:
             valid_until = q.get("valid_until", "").strip()
+            # 如果有效期是空的，认为永久有效
             if not valid_until:
                 valid.append(q)
+            # 否则检查是否过期
             elif valid_until >= today:
                 valid.append(q)
 
@@ -100,7 +138,12 @@ class CompanyDatabase:
 
     def get_cases(self, industry: str = None) -> List[Dict]:
         """获取案例"""
-        return self._load_json(self.cases_file).get("cases", [])
+        data = self._load_json(self.cases_file)
+        cases = data.get("cases", [])
+
+        if industry:
+            return [c for c in cases if industry.lower() in c.get("industry", "").lower()]
+        return cases
 
     def add_case(self, project_name: str, client: str, industry: str,
                  product_type: str, amount: float, year: int,
@@ -124,7 +167,12 @@ class CompanyDatabase:
 
     def get_products(self, category: str = None) -> List[Dict]:
         """获取产品"""
-        return self._load_json(self.products_file).get("products", [])
+        data = self._load_json(self.products_file)
+        products = data.get("products", [])
+
+        if category:
+            return [p for p in products if category.lower() in p.get("category", "").lower()]
+        return products
 
     def add_product(self, name: str, model: str, category: str,
                     description: str = "", base_price: float = 0):
@@ -154,7 +202,6 @@ class CompanyDatabase:
     def get_personnel(self, role: str = None) -> List[Dict]:
         """获取人员"""
         data = self._load_json(self.personnel_file)
-
         all_personnel = []
 
         for key in ["management", "engineers", "workers"]:
@@ -192,8 +239,7 @@ class CompanyDatabase:
 
     def match_qualifications(self, requirements: List[str]) -> List[Dict]:
         """智能匹配资质"""
-        qualifications = self.get_qualifications()
-
+        qualifications = self.get_qualifications()  # 改为获取所有资质，不再过滤
         matched = []
         matched_ids = set()
 
@@ -207,6 +253,7 @@ class CompanyDatabase:
                 q_name_lower = q["name"].lower()
                 q_level_lower = q["level"].lower()
 
+                # 尝试多种匹配方式
                 if (req_lower in q_name_lower or
                     req_lower in q_level_lower or
                     q_name_lower in req_lower or
@@ -218,20 +265,24 @@ class CompanyDatabase:
 
         # 如果匹配到的证书少于10个，返回所有有PDF的证书的前20个
         if len(matched) < 10 and qualifications:
+            # 筛选出有PDF的证书
             with_pdf = [q for q in qualifications if q.get('cert_file')]
             matched = with_pdf[:20]
 
         return matched
 
-    def match_cases(self, industry: str = None, product_type: str = None,
+    def match_cases(self, industry: str, product_type: str = None,
                     min_amount: float = 0, limit: int = 5) -> List[Dict]:
         """智能匹配案例"""
+        # 获取所有案例（不再按行业过滤）
         cases = self.get_cases()
 
+        # 如果没有product_type，返回最新的案例
         if not product_type:
             cases.sort(key=lambda x: x.get("year", 0), reverse=True)
             return cases[:limit]
 
+        # 按产品类型智能匹配
         product_type_lower = product_type.lower()
         matched_cases = []
 
@@ -239,20 +290,23 @@ class CompanyDatabase:
             c_product_type = c.get("product_type", "").lower()
             c_name = c.get("project_name", "").lower()
 
+            # 检查产品类型是否匹配（多种方式）
             if (product_type_lower in c_product_type or
-                    product_type_lower in product_type_lower or
-                    product_type_lower in c_name or
-                    product_type_lower in c_name):
+                c_product_type in product_type_lower or
+                product_type_lower in c_name):
 
                 matched_cases.append(c)
 
+        # 如果没有匹配到，返回最新的案例
         if not matched_cases:
             cases.sort(key=lambda x: x.get("year", 0), reverse=True)
             return cases[:limit]
 
+        # 按金额过滤
         if min_amount > 0:
             matched_cases = [c for c in matched_cases if c.get("amount", 0) >= min_amount]
 
+        # 按年份排序（最新的优先）
         matched_cases.sort(key=lambda x: x.get("year", 0), reverse=True)
 
         return matched_cases[:limit]
@@ -263,13 +317,14 @@ class CompanyDatabase:
         matched = []
 
         if not keywords:
-            return products[:10]
+            return products[:10]  # 如果没有关键词，返回前10个产品
 
         for p in products:
             p_name_lower = p["name"].lower()
             p_model_lower = p["model"].lower()
             p_category_lower = p.get("category", "").lower()
 
+            # 检查是否匹配任何一个关键词
             for kw in keywords:
                 kw_lower = kw.lower()
 
@@ -282,63 +337,101 @@ class CompanyDatabase:
                     matched.append(p)
                     break
 
+        # 如果没有匹配到，返回所有产品
         if not matched and products:
             matched = products
 
         return matched
 
 
-# ==================== 数据模式检查 ====================
-
-def check_data_mode() -> str:
-    """检查当前数据模式"""
-    use_demo = os.getenv("USE_DEMO_DATA", "true").lower() == "true"
-
-    if use_demo:
-        return "DEMO（示例数据）"
-    else:
-        return "PRODUCTION（真实数据）"
-
-
-# ==================== 数据目录结构说明 ====================
-
-"""
-数据目录结构：
-
-/Users/zhangdongfang/workspace/bid-generator/
-├── data/                          # 真实数据（已被 .gitignore 忽略）
-│   ├── qualifications.json
-│   ├── cases.json
-│   ├── products.json
-│   └── personnel.json
-└── data/examples/                # 示例数据（已提交到 Git）
-    ├── qualifications.json
-    ├── cases.json
-    ├── products.json
-    └── personnel.json
-
-.gitignore 配置：
-data/                    # 忽略真实数据目录
-*.log                   # 忽略日志文件
-output/                 # 忽略输出目录
-uploads/                # 忽略上传目录
-
-环境变量控制：
-USE_DEMO_DATA=true     # 使用示例数据（默认）
-USE_DEMO_DATA=false    # 使用真实数据
-"""
-
-
 # 初始化数据库（用于测试）
 if __name__ == "__main__":
-    data_dir = Path(__file__).parent.parent / "data"
+    data_dir = Path(__file__).parent / "data"
     db = CompanyDatabase(data_dir)
 
-    print("\n" + "=" * 60)
-    print(f"数据模式：{check_data_mode()}")
-    print("=" * 60)
-    print(f"资质：{len(db.get_qualifications())}")
-    print(f"案例：{len(db.get_cases())}")
-    print(f"产品：{len(db.get_products())}")
-    print(f"人员：{len(db.get_personnel())}")
-    print("=" * 60)
+    # 添加测试数据
+    print("初始化数据库...")
+
+    # 添加资质
+    db.add_qualification(
+        name="电力工程施工总承包",
+        level="三级",
+        cert_no="D242010979",
+        valid_until="2028-12-31"
+    )
+
+    db.add_qualification(
+        name="承装（修、试）电力设施许可证",
+        level="四级",
+        cert_no="6-1-00357-2018",
+        valid_until="2027-06-30"
+    )
+
+    # 添加案例
+    db.add_case(
+        project_name="中天钢铁集团（淮安）新材料有限公司10kV中压柜",
+        client="中天钢铁集团",
+        industry="钢铁",
+        product_type="高压开关柜",
+        amount=550000,
+        year=2025,
+        description="三厂10kV中压柜采购项目"
+    )
+
+    db.add_case(
+        project_name="汉西污水处理厂三期工程低压开关柜",
+        client="葛洲坝集团",
+        industry="环保",
+        product_type="低压开关柜",
+        amount=2800000,
+        year=2025,
+        description="低压开关柜、动力配电箱等采购"
+    )
+
+    # 添加产品
+    db.add_product(
+        name="户内交流金属铠装移开式开关设备",
+        model="KYN28A-12",
+        category="高压开关柜",
+        description="适用于额定电压3.6-12kV三相交流50Hz电力系统中",
+        base_price=50000
+    )
+
+    db.add_product(
+        name="低压抽出式开关柜",
+        model="MNS",
+        category="低压开关柜",
+        description="适用于发电厂、变电站、石油化工等场所",
+        base_price=30000
+    )
+
+    db.add_product(
+        name="箱式变电站",
+        model="ZGS11",
+        category="预制舱",
+        description="一体化预装式变电站",
+        base_price=80000
+    )
+
+    # 添加人员
+    db.add_personnel(
+        name="张三",
+        role="技术总监",
+        title="高级工程师",
+        experience=20,
+        certificates=["注册电气工程师", "高级工程师"]
+    )
+
+    db.add_personnel(
+        name="李四",
+        role="项目经理",
+        title="工程师",
+        experience=10,
+        certificates=["一级建造师", "PMP"]
+    )
+
+    print("数据库初始化完成！")
+    print(f"资质: {len(db.get_qualifications())}")
+    print(f"案例: {len(db.get_cases())}")
+    print(f"产品: {len(db.get_products())}")
+    print(f"人员: {len(db.get_personnel())}")
