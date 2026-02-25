@@ -49,6 +49,7 @@ Thumbs.db
 output/
 uploads/
 test-results/
+temp/
 
 # Data Protection
 # 真实数据目录（不会提交到 Git）
