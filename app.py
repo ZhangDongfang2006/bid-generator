@@ -343,8 +343,8 @@ else:
                     files = list(output_dir.glob("*.docx"))
 
                     if files:
-                        # 按修改时间排序，显示最新的文件
-                        latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:5]
+                        # 按修改时间排序，显示最新的2份文件（技术标和商务标）
+                        latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:2]
 
                         for file in latest_files:
                             with open(file, 'rb') as f:
