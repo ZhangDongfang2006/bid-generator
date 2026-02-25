@@ -46,10 +46,10 @@ except ImportError as e:
 class BidDocumentGenerator:
     """投标文件生成器 - V2 (PDF转图片版）"""
 
-    def __init__(self, templates_dir: Path, output_dir: Path, image_width_inches: float = 5.5):
+    def __init__(self, templates_dir: Path, output_dir: Path):
         self.templates_dir = templates_dir
         self.output_dir = output_dir
-        self.image_width_inches = image_width_inches  # 可调节的图片宽度（英寸）
+        self.image_width_inches = 4.5  # 自动调整的图片大小（4.5英寸，约11.4厘米）
 
     def generate_bid(self, tender_info: Dict, company_info: Dict,
                     matched_data: Dict, quote_data: Dict = None,
@@ -72,7 +72,7 @@ class BidDocumentGenerator:
 
         # 生成各个章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="投标文件")
-        self._add_table_of_contents(doc)  # 新增：添加目录
+        self._add_table_of_contents(doc, separate_bids=False)  # 修改：添加目录
         self._add_company_proof(doc, company_info)
         self._add_bid纲领_v2(doc, company_info, tender_info)
         self._add_deviation_table(doc, tender_info, table_type="技术")
@@ -120,6 +120,7 @@ class BidDocumentGenerator:
 
         # 生成技术标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="技术投标文件")
+        self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
         self._add_company_proof(doc, company_info)
         self._add_bid纲领_v2(doc, company_info, tender_info)
         self._add_deviation_table(doc, tender_info, table_type="技术")
@@ -164,6 +165,7 @@ class BidDocumentGenerator:
 
         # 生成商务标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="商务投标文件")
+        self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
         self._add_company_proof(doc, company_info)
         self._add_bid纲领_v2(doc, company_info, tender_info)
         self._add_deviation_table(doc, tender_info, table_type="商务")
@@ -1323,8 +1325,8 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_table_of_contents(self, doc: Document):
-        """添加目录"""
+    def _add_table_of_contents(self, doc: Document, separate_bids: bool = False):
+        """添加目录（动态生成）"""
         doc.add_page_break()
         
         # 添加目录标题
@@ -1337,25 +1339,53 @@ class BidDocumentGenerator:
 
         doc.add_paragraph()
 
-        # 添加目录内容
-        contents = [
-            ("1.", "公司概况", "2"),
-            ("1.1", "公司简介", "2"),
-            ("1.2", "公司资质", "2"),
-            ("1.3", "公司业绩", "2"),
-            ("2.", "投标纲领", "3"),
-            ("2.1", "技术偏离表", "3"),
-            ("2.2", "商务偏离表", "3"),
-            ("3.", "技术方案", "4"),
-            ("3.1", "项目理解", "4"),
-            ("3.2", "技术方案", "4"),
-            ("3.3", "项目团队", "4"),
-            ("4.", "资质证书", "5"),
-            ("5.", "项目案例", "6"),
-            ("6.", "报价说明", "7"),
-            ("7.", "售后服务", "8"),
-            ("8.", "承诺", "9"),
-        ]
+        # 动态生成目录内容
+        contents = []
+        
+        if separate_bids:
+            # 技术标和商务标分开
+            contents.extend([
+                ("1.", "技术标", "1"),
+                ("1.1", "封面", "1"),
+                ("1.2", "公司概况", "2"),
+                ("1.3", "公司简介", "3"),
+                ("1.4", "公司资质", "4"),
+                ("1.5", "公司业绩", "5"),
+                ("1.6", "投标纲领", "6"),
+                ("1.7", "技术偏离表", "7"),
+                ("1.8", "公司概况", "8"),
+                ("1.9", "技术方案", "9"),
+                ("1.10", "项目团队", "10"),
+                ("1.11", "技术承诺", "11"),
+                ("", "", ""),
+                ("2.", "商务标", "12"),
+                ("2.1", "封面", "13"),
+                ("2.2", "公司概况", "14"),
+                ("2.3", "投标纲领", "15"),
+                ("2.4", "商务偏离表", "16"),
+                ("2.5", "报价说明", "17"),
+                ("2.6", "商务承诺", "18"),
+            ])
+        else:
+            # 单一文件
+            contents.extend([
+                ("1.", "封面", "1"),
+                ("2.", "公司概况", "2"),
+                ("3.", "公司简介", "3"),
+                ("4.", "公司资质", "4"),
+                ("5.", "公司业绩", "5"),
+                ("6.", "投标纲领", "6"),
+                ("7.", "技术偏离表", "7"),
+                ("8.", "公司概况", "8"),
+                ("9.", "技术方案", "9"),
+                ("10.", "项目团队", "10"),
+                ("11.", "技术承诺", "11"),
+                ("12.", "资质证书", "12"),
+                ("13.", "项目案例", "13"),
+                ("14.", "报价说明", "14"),
+                ("15.", "售后服务", "15"),
+                ("16.", "承诺", "16"),
+            ])
 
         # 创建表格形式的目录
         table = doc.add_table(rows=0, cols=3)
