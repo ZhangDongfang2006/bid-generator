@@ -55,6 +55,39 @@ class CompanyDatabase:
         # 初始化数据文件
         self._init_data_files()
 
+    def _init_data_files(self):
+        """初始化数据文件"""
+        # 确保数据目录存在
+        self.base_dir.mkdir(parents=True, exist_ok=True)
+
+        # 初始化文件
+        for filepath, default_data in [
+            (self.qualification_file, {"qualifications": []}),
+            (self.cases_file, {"cases": []}),
+            (self.products_file, {"products": []}),
+            (self.personnel_file, {
+                "management": [],
+                "engineers": [],
+                "workers": []
+            })
+        ]:
+            if not filepath.exists():
+                self._save_json(filepath, default_data)
+                print(f"✓ 创建数据文件: {filepath.name}")
+
+    def _load_json(self, filepath: Path) -> Dict:
+        """加载JSON文件"""
+        if not filepath.exists():
+            print(f"⚠️ 数据文件不存在: {filepath}")
+            return {}
+
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"✗ 加载数据文件失败 {filepath}: {e}")
+            return {}
+
     def _save_json(self, filepath: Path, data: Dict):
         """保存JSON文件"""
         with open(filepath, 'w', encoding='utf-8') as f:
