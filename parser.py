@@ -15,10 +15,11 @@ import subprocess
 
 class ParseResult:
     """解析结果类"""
-    def __init__(self, requirements, confidence_score=0.0):
+    def __init__(self, requirements, confidence_score=0.0, project_name=None):
         self.requirements = requirements
         self.confidence_score = confidence_score  # 0.0-1.0
-        
+        self.project_name = project_name  # 项目名称
+
     def get_confidence_level(self):
         """获取置信度等级"""
         if self.confidence_score >= 0.8:
@@ -29,7 +30,7 @@ class ParseResult:
             return "低"
         else:
             return "不确定"
-    
+
     def get_confidence_color(self):
         """获取置信度颜色标识"""
         if self.confidence_score >= 0.8:
@@ -47,6 +48,43 @@ class TenderParser:
 
     def __init__(self, data_dir: Path):
         self.data_dir = data_dir
+
+    def extract_project_name(self, filepath: Path, text: str) -> str:
+        """从文件名和内容中提取项目名称"""
+        # 方法1：从文件名中提取
+        filename = filepath.stem  # 不含扩展名的文件名
+
+        # 清理文件名
+        filename = re.sub(r'^[\d\-\_\.]+', '', filename)  # 去除前缀的数字、下划线、点
+        filename = re.sub(r'(招标文件|投标文件|采购|询价|需求)$', '', filename)  # 去除后缀
+
+        # 如果文件名看起来像项目名称（长度>=4），使用它
+        if len(filename) >= 4 and not re.match(r'^\d+$', filename):
+            return filename.strip()
+
+        # 方法2：从内容中提取
+        project_patterns = [
+            r'项目名称[:：]\s*([^\n\r]+)',
+            r'项目[:：]\s*([^\n\r]+)',
+            r'工程名称[:：]\s*([^\n\r]+)',
+            r'采购项目[:：]\s*([^\n\r]+)',
+            r'标的名称[:：]\s*([^\n\r]+)',
+        ]
+
+        for pattern in project_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                project_name = match.group(1).strip()
+                # 去除多余的标点符号
+                project_name = re.sub(r'[。、；;，,\s]+$', '', project_name)
+                if len(project_name) >= 4:
+                    return project_name
+
+        # 方法3：如果文件名太短，使用通用名称
+        if len(filename) < 4:
+            return "未命名项目"
+
+        return filename.strip() or "未命名项目"
 
     def parse_file(self, filepath: Path) -> ParseResult:
         """解析招标文件"""
@@ -81,18 +119,22 @@ class TenderParser:
             text = ""
             for page in reader.pages:
                 text += page.extract_text()
-            
+
             # 解析需求
             requirements = self._extract_requirements_from_text(text)
-            
+
+            # 提取项目名称
+            project_name = self.extract_project_name(filepath, text)
+
             # 计算置信度
             confidence = self._calculate_confidence(requirements, 'pdf')
             
             print(f"✓ PDF解析完成")
+            print(f"  - 项目名称: {project_name}")
             print(f"  - 提取需求: {len(requirements)}")
             print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
-            
-            return ParseResult(requirements, confidence_score=confidence)
+
+            return ParseResult(requirements, confidence_score=confidence, project_name=project_name)
             
         except Exception as e:
             print(f"✗ PDF解析失败: {e}")
@@ -109,18 +151,22 @@ class TenderParser:
             
             # 提取文本
             text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-            
+
             # 解析需求
             requirements = self._extract_requirements_from_text(text)
-            
+
+            # 提取项目名称
+            project_name = self.extract_project_name(filepath, text)
+
             # 计算置信度
             confidence = self._calculate_confidence(requirements, 'docx')
             
             print(f"✓ DOCX解析完成")
+            print(f"  - 项目名称: {project_name}")
             print(f"  - 提取需求: {len(requirements)}")
             print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
-            
-            return ParseResult(requirements, confidence_score=confidence)
+
+            return ParseResult(requirements, confidence_score=confidence, project_name=project_name)
             
         except Exception as e:
             print(f"✗ DOCX解析失败: {e}")
@@ -163,16 +209,18 @@ class TenderParser:
                             doc = docx.Document(str(temp_docx))
                             text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
                             requirements = self._extract_requirements_from_text(text)
+                            project_name = self.extract_project_name(filepath, text)
                             confidence = self._calculate_confidence(requirements, 'doc')
-                            
+
                             # 删除临时文件
                             temp_docx.unlink()
-                            
+
                             print(f"✓ DOC解析完成")
+                            print(f"  - 项目名称: {project_name}")
                             print(f"  - 提取需求: {len(requirements)}")
                             print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
-                            
-                            return ParseResult(requirements, confidence_score=confidence)
+
+                            return ParseResult(requirements, confidence_score=confidence, project_name=project_name)
                         else:
                             print("⚠️  转换后的文件未找到")
                     else:
@@ -192,13 +240,15 @@ class TenderParser:
                 
                 text = result.stdout
                 requirements = self._extract_requirements_from_text(text)
+                project_name = self.extract_project_name(filepath, text)
                 confidence = self._calculate_confidence(requirements, 'doc')
-                
+
                 print(f"✓ DOC解析完成")
+                print(f"  - 项目名称: {project_name}")
                 print(f"  - 提取需求: {len(requirements)}")
                 print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
-                
-                return ParseResult(requirements, confidence_score=confidence)
+
+                return ParseResult(requirements, confidence_score=confidence, project_name=project_name)
             
         except Exception as e:
             print(f"✗ DOC解析失败: {e}")

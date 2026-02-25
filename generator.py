@@ -1409,27 +1409,35 @@ class BidDocumentGenerator:
             section.top_margin = Cm(2.54)    # 上边距 2.54cm
             section.bottom_margin = Cm(2.54) # 下边距 2.54cm
 
-            # 设置页眉和页脚
-            header = section.header
+            # 设置页脚
             footer = section.footer
 
             # 在页脚添加页码
             footer_para = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
             footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            
-            # 添加页码文本
-            footer_para.add_run("- 第 ").font.size = Pt(10)
-            footer_para.add_run("  ").font.size = Pt(10)
 
-            # 添加页码域（使用 XML 方式）
+            # 添加页码
             run = footer_para.add_run()
             run.font.size = Pt(10)
-            
-            # 使用 XML 添加页码域
-            fldChar = OxmlElement('w:fldSimple')
-            fldChar.set(qn('w:instr'), 'PAGE')
-            
-            run._r.addnext(fldChar)
+
+            # 创建页码域
+            fldChar1 = OxmlElement('w:fldChar')
+            fldChar1.set(qn('w:fldCharType'), 'begin')
+
+            instrText = OxmlElement('w:instrText')
+            instrText.set(qn('xml:space'), 'preserve')
+            instrText.text = "PAGE"
+
+            fldChar2 = OxmlElement('w:fldChar')
+            fldChar2.set(qn('w:fldCharType'), 'end')
+
+            run._r.append(fldChar1)
+            run._r.append(instrText)
+            run._r.append(fldChar2)
+
+            # 添加页码前后缀
+            run._element.insertbefore(footer_para.add_run("第 ")._element, run._element[0])
+            run._element.append(footer_para.add_run(" 页")._element)
 
 
 # 测试代码

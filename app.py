@@ -130,30 +130,38 @@ else:
         # 合并所有文件的解析结果
         all_requirements = []
         confidence_scores = []
-        
+        project_names = []  # 保存每个文件的项目名称
+
         for i, uploaded_file in enumerate(uploaded_files, 1):
             # 保存到临时文件
             temp_file = Path("temp") / uploaded_file.name
             temp_file.parent.mkdir(exist_ok=True)
-            
+
             with open(temp_file, 'wb') as f:
                 f.write(uploaded_file.getbuffer())
-            
+
             # 解析文件
             parsing_status = st.empty()
             parsing_status.info(f"🔄 正在解析第 {i}/{len(uploaded_files)} 个文件: {uploaded_file.name}...")
-            
+
             parse_result = parser.parse_file(temp_file)
             all_requirements.extend(parse_result.requirements)
             confidence_scores.append(parse_result.confidence_score)
-            
+            if parse_result.project_name:
+                project_names.append(parse_result.project_name)
+
             # 清除解析状态
             parsing_status.empty()
-        
+
         # 合并解析结果
         avg_confidence = sum(confidence_scores) / len(confidence_scores)
-        st.session_state.parse_result = ParseResult(all_requirements, confidence_score=avg_confidence)
+
+        # 确定项目名称（使用第一个文件的项目名称）
+        project_name = project_names[0] if project_names else None
+
+        st.session_state.parse_result = ParseResult(all_requirements, confidence_score=avg_confidence, project_name=project_name)
         st.session_state.confidence_scores = confidence_scores  # 保存每个文件的置信度
+        st.session_state.project_name = project_name  # 保存项目名称
 
         # 显示解析结果
         st.markdown("---")
@@ -187,7 +195,13 @@ else:
             delta=f"{avg_confidence:.2f}",
             help=f"{parse_result.get_confidence_level()} - AI 对所有文件解析的平均可信程度"
         )
-        
+
+        # 显示项目名称
+        if project_name:
+            st.markdown("---")
+            st.markdown("### 📌 项目信息")
+            st.markdown(f"**项目名称**: {project_name}")
+
         # 显示解析出的需求
         st.markdown(f"**提取需求**: {len(parse_result.requirements)}")
         
@@ -309,6 +323,12 @@ else:
                 # 更新 tender_info
                 st.session_state.tender_info['show_cert_images'] = True
                 st.session_state.tender_info['generate_time'] = datetime.now().isoformat()
+
+                # 添加项目名称
+                if st.session_state.get('project_name'):
+                    st.session_state.tender_info['project_info'] = {
+                        'project_name': st.session_state.project_name
+                    }
 
                 # 准备匹配数据
                 matched_data = st.session_state.matched_data
