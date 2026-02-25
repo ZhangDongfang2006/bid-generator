@@ -29,6 +29,17 @@ class ParseResult:
             return "低"
         else:
             return "不确定"
+    
+    def get_confidence_color(self):
+        """获取置信度颜色标识"""
+        if self.confidence_score >= 0.8:
+            return "🟢"  # 高 - 绿色
+        elif self.confidence_score >= 0.6:
+            return "🟡"  # 中 - 黄色
+        elif self.confidence_score >= 0.4:
+            return "🟠"  # 低 - 橙色
+        else:
+            return "⚪"  # 不确定 - 白色
 
 
 class TenderParser:
@@ -282,6 +293,31 @@ class TenderParser:
         
         # 确保置信度在 0.0-1.0 之间
         return max(0.0, min(confidence, 1.0))
+    
+    def _get_suggestions(self, parse_result: ParseResult) -> List[str]:
+        """生成改进建议"""
+        suggestions = []
+        level = parse_result.get_confidence_level()
+        
+        if level == "低" or level == "不确定":
+            suggestions.append("文件可能不是标准招标文件格式，请检查文件内容")
+            suggestions.append("建议将文件转换为 PDF 或 DOCX 格式后重新上传")
+            suggestions.append("可以尝试手动输入需求")
+        
+        if len(parse_result.requirements) < 5:
+            suggestions.append("提取的需求较少，可能遗漏了部分内容")
+            suggestions.append("建议人工补充重要的需求")
+        
+        # 检查需求质量
+        vague_count = 0
+        for req in parse_result.requirements[:10]:
+            if any(kw in req.lower() for kw in ["等", "相关", "类似", "最好"]):
+                vague_count += 1
+        
+        if vague_count > 2:
+            suggestions.append("部分需求表达不够具体，建议明确化")
+        
+        return suggestions
 
 
 # 测试代码

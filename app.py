@@ -74,6 +74,9 @@ if 'preview_doc_bytes' not in st.session_state:
 if 'preview_available' not in st.session_state:
     st.session_state.preview_available = False
 
+if 'active_page' not in st.session_state:
+    st.session_state.active_page = 'main'
+
 # ==================== 主界面 ====================
 
 # 侧边栏
@@ -99,6 +102,13 @@ with st.sidebar:
 # 主内容区
 if st.session_state.get('active_page') == 'data_management':
     st.title("📊 资料管理")
+    
+    # 返回按钮
+    if st.button("⬅️ 返回首页", use_container_width=True):
+        st.session_state.active_page = 'main'
+        st.rerun()
+    
+    st.markdown("---")
     st.markdown("请在本地文件系统中管理以下目录中的内容：")
     st.markdown(f"- `{data_dir}/qualifications.json`")
     st.markdown(f"- `{data_dir}/cases.json`")
@@ -145,7 +155,7 @@ else:
             "置信度",
             f"{parse_result.confidence_score:.2f}",
             delta=f"{parse_result.confidence_score:.2f}",
-            help=f"{parse_result.confidence_level} - AI 对文件解析的可信程度"
+            help=f"{parse_result.get_confidence_level()} - AI 对文件解析的可信程度"
         )
         
         # 显示解析出的需求
@@ -176,8 +186,8 @@ else:
         st.session_state.tender_info['requirements'] = edited_requirements
         
         # 显示建议
-        if parse_result.confidence_level != "高":
-            st.warning(f"⚠️ {parse_result.confidence_level}置信度：建议仔细校验解析结果")
+        if parse_result.get_confidence_level() != "高":
+            st.warning(f"⚠️ {parse_result.get_confidence_level()}置信度：建议仔细校验解析结果")
             
             # 生成改进建议
             suggestions = parser._get_suggestions(parse_result)
