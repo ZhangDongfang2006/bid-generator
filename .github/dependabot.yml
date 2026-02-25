@@ -17,15 +17,15 @@ updates:
       - "dependencies"
       - "python"
 
-  # GitHub Actions 依赖更新
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
-    target-branch: "main"
-    labels:
-      - "dependencies"
-      - "github-actions"
+  # GitHub Actions 依赖更新（已禁用 - 手动升级到 v6）
+  # - package-ecosystem: "github-actions"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "monday"
+  #     time: "09:00"
+  #   open-pull-requests-limit: 5
+  #   target-branch: "main"
+  #   labels:
+  #     - "dependencies"
+  #     - "github-actions"
