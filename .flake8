@@ -1,0 +1,38 @@
+[flake8]
+# 忽略的目录和文件
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    env,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    node_modules,
+
+# 忽略的文件类型
+max-line-length = 127
+max-complexity = 10
+
+# 忽略的错误类型
+ignore = E203,W503
+
+# 匹配的文件模式
+filename = *.py
+per-file-ignores =
+    # 备份文件不检查
+    *_backup*.py: E,F
+    # 测试文件不检查
+    test_*.py: E,F
+    # 临时修复文件不检查
+    app_fixed.py: E,F
+    fix_*.py: E,F
+    proper_fix_*.py: E,F
+    quick_install_*.py: E,F
+    replace_*.py: E,F
+    # 其他工具脚本
+    patch_*.py: E,F
+    stats.py: E,F
+    tender_evaluator.py: E501

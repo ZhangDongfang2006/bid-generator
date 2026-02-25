@@ -285,7 +285,7 @@ else:
                         # 生成预览版本（简化内容）
                         output_paths = generator.generate_separate_bids_preview(
                             st.session_state.tender_info,
-                            COMPANY_INFO,
+                            config.COMPANY_INFO,
                             matched_data
                         )
                         st.success("✅ 预览文件生成成功！")
@@ -294,7 +294,7 @@ else:
                         # 生成完整版本
                         output_paths = generator.generate_separate_bids(
                             st.session_state.tender_info,
-                            COMPANY_INFO,
+                            config.COMPANY_INFO,
                             matched_data
                         )
                         st.success("✅ 投标文件生成成功！")
@@ -305,7 +305,7 @@ else:
                         # 生成预览版本
                         output_path = generator.generate_bid_preview(
                             st.session_state.tender_info,
-                            COMPANY_INFO,
+                            config.COMPANY_INFO,
                             matched_data
                         )
                         st.success("✅ 预览文件生成成功！")
@@ -314,7 +314,7 @@ else:
                         # 生成完整版本
                         output_path = generator.generate_bid(
                             st.session_state.tender_info,
-                            COMPANY_INFO,
+                            config.COMPANY_INFO,
                             matched_data
                         )
                         st.success("✅ 投标文件生成成功！")
@@ -415,13 +415,13 @@ else:
                             if st.session_state.tender_info.get('separate_bids'):
                                 output_paths = generator.generate_separate_bids(
                                     st.session_state.tender_info,
-                                    COMPANY_INFO,
+                                    config.COMPANY_INFO,
                                     matched_data
                                 )
                             else:
                                 output_path = generator.generate_bid(
                                     st.session_state.tender_info,
-                                    COMPANY_INFO,
+                                    config.COMPANY_INFO,
                                     matched_data
                                 )
                             
@@ -445,7 +445,7 @@ else:
         
         # 显示生成状态
         st.markdown(f"**生成时间**: {st.session_state.tender_info.get('generate_time', 'N/A')}")
-        st.markdown(f"**是否正式版本**: {'是' if st.session_state.tender_info.get('is_final') else "预览版本"}")
+        st.markdown(f"**是否正式版本**: {'是' if st.session_state.tender_info.get('is_final') else '预览版本'}")
         
         # 查找生成的文件
         output_dir = Path("output")
