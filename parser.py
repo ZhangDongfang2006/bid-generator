@@ -132,60 +132,78 @@ class TenderParser:
         
         try:
             # 检查 antiword 是否安装
-            antiword_path = subprocess.run(['which', 'antiword'], 
-                                         capture_output=True, text=True).stdout.strip()
+            result = subprocess.run(['which', 'antiword'], 
+                                 capture_output=True, text=True)
+            antiword_path = result.stdout.strip()
             
             if not antiword_path:
                 print("⚠️  antiword 未安装，尝试使用其他方法")
-                # 尝试使用 textract
-                try:
-                    import textract
-                    text = textract.process(filepath)
-                except ImportError:
-                    print("⚠️  textract 也未安装，无法解析 DOC 文件")
-                    return ParseResult([], confidence_score=0.0)
-            else:
-                # 转换 DOC 到 DOCX
-                temp_docx = filepath.with_suffix('.docx')
+                # 尝试使用 LibreOffice 转换
+                libreoffice_result = subprocess.run(['which', 'libreoffice', 'soffice'], 
+                                                 capture_output=True, text=True)
+                libreoffice_path = libreoffice_result.stdout.strip() or libreoffice_result.stderr.strip()
                 
-                # 检查是否已转换
-                if not temp_docx.exists():
-                    result = subprocess.run([antiword_path, '-t', str(filepath), '-o', str(temp_docx)],
-                                         capture_output=True, text=True, timeout=30)
+                if libreoffice_path:
+                    print(f"✓ 找到 LibreOffice: {libreoffice_path}")
+                    # 使用 LibreOffice 转换 DOC 为 DOCX
+                    temp_dir = Path("temp")
+                    temp_dir.mkdir(exist_ok=True)
                     
-                    if result.returncode != 0:
-                        print(f"⚠️  antiword 转换失败: {result.stderr}")
-                        # 转换失败，返回低置信度
-                        requirements = []
-                        confidence = 0.1
+                    convert_result = subprocess.run(
+                        [libreoffice_path, '--headless', '--convert-to', 'docx', 
+                         '--outdir', str(temp_dir), str(filepath)],
+                        capture_output=True, text=True, timeout=60
+                    )
+                    
+                    if convert_result.returncode == 0:
+                        # 查找转换后的文件
+                        temp_docx = temp_dir / filepath.with_suffix('.docx').name
+                        if temp_docx.exists():
+                            print(f"✓ LibreOffice 转换成功")
+                            doc = docx.Document(str(temp_docx))
+                            text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
+                            requirements = self._extract_requirements_from_text(text)
+                            confidence = self._calculate_confidence(requirements, 'doc')
+                            
+                            # 删除临时文件
+                            temp_docx.unlink()
+                            
+                            print(f"✓ DOC解析完成")
+                            print(f"  - 提取需求: {len(requirements)}")
+                            print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
+                            
+                            return ParseResult(requirements, confidence_score=confidence)
+                        else:
+                            print("⚠️  转换后的文件未找到")
                     else:
-                        print(f"✓ DOC 转换为 DOCX 成功")
-                        # 解析转换后的 DOCX
-                        doc = docx.Document(str(temp_docx))
-                        text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-                        requirements = self._extract_requirements_from_text(text)
-                        confidence = self._calculate_confidence(requirements, 'doc')
-                        
-                        # 删除临时文件
-                        temp_docx.unlink()
-                else:
-                    # 已经转换过，直接解析
-                    doc = docx.Document(str(temp_docx))
-                    text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-                    requirements = self._extract_requirements_from_text(text)
-                    confidence = self._calculate_confidence(requirements, 'doc')
-                    
-                    # 删除临时文件
-                    temp_docx.unlink()
-            
-            print(f"✓ DOC解析完成")
-            print(f"  - 提取需求: {len(requirements)}")
-            print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
-            
-            return ParseResult(requirements, confidence_score=confidence)
+                        print(f"⚠️  LibreOffice 转换失败: {convert_result.stderr}")
+                
+                # LibreOffice 失败，返回低置信度
+                print("⚠️  无法解析 DOC 文件")
+                return ParseResult([], confidence_score=0.0)
+            else:
+                # 使用 antiword 直接提取文本
+                result = subprocess.run([antiword_path, '-t', str(filepath)],
+                                     capture_output=True, text=True, timeout=30)
+                
+                if result.returncode != 0:
+                    print(f"⚠️  antiword 提取失败: {result.stderr}")
+                    return ParseResult([], confidence_score=0.0)
+                
+                text = result.stdout
+                requirements = self._extract_requirements_from_text(text)
+                confidence = self._calculate_confidence(requirements, 'doc')
+                
+                print(f"✓ DOC解析完成")
+                print(f"  - 提取需求: {len(requirements)}")
+                print(f"  - 置信度: {confidence:.2f} ({confidence * 100:.0f}%)")
+                
+                return ParseResult(requirements, confidence_score=confidence)
             
         except Exception as e:
             print(f"✗ DOC解析失败: {e}")
+            import traceback
+            traceback.print_exc()
             return ParseResult([], confidence_score=0.0)
 
     def _extract_requirements_from_text(self, text: str) -> List[str]:

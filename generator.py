@@ -328,6 +328,119 @@ class BidDocumentGenerator:
             "commercial": commercial_path
         }
 
+    def generate_bid_preview(self, tender_info: Dict, company_info: Dict,
+                           matched_data: Dict) -> Path:
+        """
+        生成投标文件（预览版本，简化内容）
+
+        Args:
+            tender_info: 招标信息
+            company_info: 公司信息
+            matched_data: 匹配的数据（资质、案例、产品等）
+
+        Returns:
+            生成的文件路径
+        """
+        # 创建新文档
+        doc = Document()
+
+        # 添加封面
+        self._add_cover_v2(doc, tender_info, company_info, bid_type="投标文件（预览）")
+
+        # 添加目录
+        doc.add_heading("目录", level=1)
+        doc.add_paragraph("1. 公司简介")
+        doc.add_paragraph("2. 技术方案概述")
+        doc.add_paragraph("3. 项目团队")
+        doc.add_paragraph("4. 资质证书")
+        doc.add_paragraph("5. 项目案例")
+        doc.add_paragraph("6. 产品说明")
+        doc.add_paragraph("7. 报价说明")
+        doc.add_paragraph("8. 售后服务")
+        doc.add_page_break()
+
+        # 添加公司简介
+        doc.add_heading("1. 公司简介", level=1)
+        doc.add_paragraph(company_info['name'])
+        doc.add_paragraph(company_info.get('description', ''))
+        doc.add_page_break()
+
+        # 添加技术方案概述
+        doc.add_heading("2. 技术方案概述", level=1)
+        doc.add_paragraph("（预览版本，技术方案将在正式版本中详细展示）")
+        doc.add_paragraph(f"需求分析：共 {len(tender_info.get('requirements', []))} 个需求")
+        for i, req in enumerate(tender_info.get('requirements', [])[:5], 1):
+            doc.add_paragraph(f"{i}. {req}")
+        if len(tender_info.get('requirements', [])) > 5:
+            doc.add_paragraph(f"...（还有 {len(tender_info.get('requirements', [])) - 5} 个需求）")
+        doc.add_page_break()
+
+        # 添加项目团队
+        doc.add_heading("3. 项目团队", level=1)
+        doc.add_paragraph("（预览版本，项目团队将在正式版本中详细展示）")
+        personnel = matched_data.get('personnel', [])[:3]
+        for p in personnel:
+            doc.add_paragraph(f"• {p.get('name', '')} - {p.get('role', '')}")
+        doc.add_page_break()
+
+        # 添加资质证书
+        doc.add_heading("4. 资质证书", level=1)
+        doc.add_paragraph(f"共匹配到 {len(matched_data.get('qualifications', []))} 项资质")
+        qualifications = matched_data.get('qualifications', [])[:5]
+        for q in qualifications:
+            doc.add_paragraph(f"• {q['name']} - {q['level']}")
+        if len(matched_data.get('qualifications', [])) > 5:
+            doc.add_paragraph(f"...（还有 {len(matched_data.get('qualifications', [])) - 5} 项资质）")
+        doc.add_paragraph("（完整资质将在正式版本中显示，包括证书图片）")
+        doc.add_page_break()
+
+        # 添加项目案例
+        doc.add_heading("5. 项目案例", level=1)
+        doc.add_paragraph(f"共匹配到 {len(matched_data.get('cases', []))} 项案例")
+        cases = matched_data.get('cases', [])[:3]
+        for c in cases:
+            doc.add_paragraph(f"• {c['project_name']} - {c.get('client', '')}")
+        if len(matched_data.get('cases', [])) > 3:
+            doc.add_paragraph(f"...（还有 {len(matched_data.get('cases', [])) - 3} 项案例）")
+        doc.add_paragraph("（完整案例将在正式版本中详细展示）")
+        doc.add_page_break()
+
+        # 添加产品说明
+        doc.add_heading("6. 产品说明", level=1)
+        doc.add_paragraph(f"共匹配到 {len(matched_data.get('products', []))} 项产品")
+        products = matched_data.get('products', [])[:3]
+        for p in products:
+            doc.add_paragraph(f"• {p['name']} - {p['model']}")
+        if len(matched_data.get('products', [])) > 3:
+            doc.add_paragraph(f"...（还有 {len(matched_data.get('products', [])) - 3} 项产品）")
+        doc.add_paragraph("（完整产品信息将在正式版本中详细展示）")
+        doc.add_page_break()
+
+        # 添加报价说明
+        doc.add_heading("7. 报价说明", level=1)
+        doc.add_paragraph("（预览版本，详细报价将在正式版本中展示）")
+        doc.add_paragraph("本报价为预览报价，仅供参考。")
+        doc.add_page_break()
+
+        # 添加售后服务
+        doc.add_heading("8. 售后服务", level=1)
+        doc.add_paragraph("（预览版本，详细售后服务承诺将在正式版本中展示）")
+        doc.add_paragraph(company_info.get('service_commitment', ''))
+        doc.add_page_break()
+
+        # 保存文件
+        project_name = tender_info.get("project_info", {}).get("project_name", "未知项目")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"投标文件预览_{project_name}_{timestamp}.docx"
+
+        # 清理文件名
+        filename = "".join(c for c in filename if c not in '\/:*?"<>|')
+
+        output_path = self.output_dir / filename
+        doc.save(output_path)
+
+        return output_path
+
     # ==================== 添加章节的方法 ====================
 
     def _add_cover_v2(self, doc: Document, tender_info: Dict, company_info: Dict, bid_type: str = "投标文件"):

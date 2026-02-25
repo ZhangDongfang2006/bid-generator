@@ -51,7 +51,9 @@ parser = TenderParser(data_dir)
 
 # 初始化生成器
 templates_dir = Path(__file__).parent / "templates"
-generator = BidGenerator(db, templates_dir)
+output_dir = Path("output")
+output_dir.mkdir(exist_ok=True)
+generator = BidGenerator(templates_dir, output_dir)
 
 # ==================== 会话状态 ====================
 
@@ -250,6 +252,21 @@ else:
         
         # 更新session state
         st.session_state.matched_data['products'] = matched_products
+        
+        # 匹配人员（直接获取所有人员）
+        st.subheader("📋 项目团队")
+        matched_personnel = db.get_personnel()
+        
+        st.markdown(f"**可用人员**: {len(matched_personnel)} 项")
+        
+        # 显示人员（最多前5个）
+        with st.expander("查看项目团队", expanded=False):
+            for i, person in enumerate(matched_personnel[:5], 1):
+                st.markdown(f"{i}. **{person['name']}** - {person.get('role', '')}")
+                st.caption(f"职位：{person.get('title', 'N/A')} | 经验：{person.get('experience', 0)} 年")
+        
+        # 更新session state
+        st.session_state.matched_data['personnel'] = matched_personnel
     
     # 第三步：生成投标文件
     if st.session_state.matched_data:
@@ -334,8 +351,8 @@ else:
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        if output_paths and output_paths[0]:
-                            tech_bid_path = output_paths[0]
+                        if output_paths and 'tech' in output_paths:
+                            tech_bid_path = output_paths['tech']
                             with open(tech_bid_path, 'rb') as f:
                                 st.download_button(
                                     label="📥 下载技术标",
@@ -345,8 +362,8 @@ else:
                                 )
                     
                     with col2:
-                        if output_paths and output_paths[1]:
-                            biz_bid_path = output_paths[1]
+                        if output_paths and 'commercial' in output_paths:
+                            biz_bid_path = output_paths['commercial']
                             with open(biz_bid_path, 'rb') as f:
                                 st.download_button(
                                     label="📥 下载商务标",
@@ -372,43 +389,94 @@ else:
     if st.session_state.preview_available:
         st.markdown("---")
         st.header("👁 第四步：预览投标文件")
-        st.markdown("在浏览器中预览生成的投标文件，无需下载")
+        st.markdown("查看预览版本的文件信息，确认无误后下载正式版本")
         
         # 读取生成的文件
         output_dir = Path("output")
         if output_dir.exists():
-            files = list(output_dir.glob("*.docx"))
+            files = list(output_dir.glob("*预览*.docx"))
             
             if files:
                 latest_file = max(files, key=lambda f: f.stat().st_mtime)
                 
-                try:
-                    # 读取文档
-                    from docx import Document
-                    doc = Document(str(latest_file))
-                    
-                    # 在浏览器中预览
-                    st.markdown("### 📄 预览内容")
-                    
-                    # 显示文档标题
-                    for para in doc.paragraphs[:5]:
-                        if para.text.strip():
-                            st.markdown(f"**{para.text}**")
-                    
-                    # 显示文档内容预览
-                    with st.expander("查看更多内容", expanded=False):
-                        for para in doc.paragraphs[5:20]:
-                            if para.text.strip():
-                                st.text(para.text)
-                    
+                # 显示文件信息
+                st.markdown("### 📄 文件信息")
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("文件名", latest_file.name)
+                
+                with col2:
+                    file_size = latest_file.stat().st_size / 1024  # KB
+                    st.metric("文件大小", f"{file_size:.1f} KB")
+                
+                with col3:
+                    mtime = datetime.fromtimestamp(latest_file.stat().st_mtime)
+                    st.metric("生成时间", mtime.strftime("%H:%M:%S"))
+                
+                st.markdown("---")
+                
+                # 提供预览下载和正式下载
+                st.markdown("### 📥 下载选项")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
                     # 下载预览版本
                     with open(latest_file, 'rb') as f:
                         st.download_button(
-                            label="📥 下载预览版本",
+                            label="👁 下载预览版本（推荐先查看）",
                             data=f,
-                            file_name=f"预览_{latest_file.name}",
-                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            file_name=latest_file.name,
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            help="预览版本只包含摘要信息，用于快速检查文档结构"
                         )
+                
+                with col2:
+                    # 确认下载正式版本
+                    if st.button("✅ 确认下载正式版本", type="primary", key="confirm_final"):
+                        try:
+                            st.info("🔄 正在生成正式版本...")
+                            
+                            if separate_bids:
+                                # 生成正式的技术标和商务标
+                                output_paths = generator.generate_separate_bids(
+                                    st.session_state.tender_info,
+                                    config.COMPANY_INFO,
+                                    matched_data
+                                )
+                                st.success("✅ 正式版本生成成功！")
+                                st.session_state.bid_generated = True
+                                st.rerun()
+                            else:
+                                # 生成正式的单一投标文件
+                                output_path = generator.generate_bid(
+                                    st.session_state.tender_info,
+                                    config.COMPANY_INFO,
+                                    matched_data
+                                )
+                                st.success("✅ 正式版本生成成功！")
+                                st.session_state.bid_generated = True
+                                st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ 生成失败：{e}")
+                else:
+                    st.info("⚠️ 未找到预览文件")
+            
+            st.markdown("---")
+            
+            # 说明
+            st.markdown("### 💡 使用说明")
+            st.markdown("""
+            **预览版本 vs 正式版本**：
+            - **预览版本**：只包含摘要信息（前3-5项），生成速度快
+            - **正式版本**：包含完整内容和所有匹配的数据
+            
+            **建议流程**：
+            1. 下载预览版本，快速检查文档结构
+            2. 确认无误后，点击"确认下载正式版本"
+            3. 下载完整的正式版本投标文件
+            """)
                     
                     # 生成正式版本按钮
                     if st.button("🚀 确认并生成正式版本", type="primary", key="generate_final"):
