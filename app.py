@@ -460,8 +460,8 @@ else:
                                 st.rerun()
                         except Exception as e:
                             st.error(f"❌ 生成失败：{e}")
-                else:
-                    st.info("⚠️ 未找到预览文件")
+            else:
+                st.info("⚠️ 未找到预览文件")
             
             st.markdown("---")
             
@@ -477,43 +477,6 @@ else:
             2. 确认无误后，点击"确认下载正式版本"
             3. 下载完整的正式版本投标文件
             """)
-                    
-                    # 生成正式版本按钮
-                    if st.button("🚀 确认并生成正式版本", type="primary", key="generate_final"):
-                        try:
-                            st.info("🔄 正在生成正式版本...")
-                            
-                            # 使用完整的数据生成
-                            matched_data = st.session_state.matched_data
-                            st.session_state.tender_info['generate_time'] = datetime.now().isoformat()
-                            st.session_state.tender_info['is_final'] = True
-                            
-                            # 生成完整版本
-                            if st.session_state.tender_info.get('separate_bids'):
-                                output_paths = generator.generate_separate_bids(
-                                    st.session_state.tender_info,
-                                    config.COMPANY_INFO,
-                                    matched_data
-                                )
-                            else:
-                                output_path = generator.generate_bid(
-                                    st.session_state.tender_info,
-                                    config.COMPANY_INFO,
-                                    matched_data
-                                )
-                            
-                            st.success("✅ 正式版本生成成功！")
-                            st.session_state.preview_available = False
-                            st.session_state.bid_generated = True
-                            
-                            # 提示下载
-                            st.info("📥 请在下方下载正式版本")
-                            
-                        except Exception as e:
-                            st.error(f"❌ 生成失败：{e}")
-                    
-                except Exception as e:
-                    st.warning(f"⚠️ 预览失败：{e}")
     
     # 第五步：下载投标文件
     if st.session_state.bid_generated:
