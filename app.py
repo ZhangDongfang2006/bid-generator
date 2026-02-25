@@ -310,15 +310,13 @@ else:
                 # 调试信息
                 st.write(f"生成信息：")
                 st.write(f"  - 显示证书图片：是（默认启用）")
-                st.write(f"  - 图片大小：{image_width} 英寸")
                 st.write(f"  - 匹配资质：{len(matched_data.get('qualifications', []))}")
                 st.write(f"  - 匹配案例：{len(matched_data.get('cases', []))}")
                 st.write(f"  - 匹配产品：{len(matched_data.get('products', []))}")
                 
                 if separate_bids:
                     # 生成技术标和商务标分开
-                    # 更新生成器使用新的图片大小
-                    generator = BidGenerator(templates_dir, output_dir, image_width_inches=image_width)
+                    generator = BidGenerator(templates_dir, output_dir)
                     
                     output_paths = generator.generate_separate_bids(
                         st.session_state.tender_info,
@@ -338,3 +336,5 @@ else:
                     
                     if files:
                         latest_file = max(files, key=lambda f: f.stat().st_mtime)
+            except Exception as e:
+                st.error(f"❌ 生成失败：{e}")
