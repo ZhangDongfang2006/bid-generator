@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "id": 1,
+      "project_name": "示例高压开关柜项目",
+      "client": "示例客户A公司",
+      "industry": "电力",
+      "product_type": "高压开关柜",
+      "amount": 1000000,
+      "year": 2024,
+      "description": "这是一个示例项目，用于演示系统功能",
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 2,
+      "project_name": "示例预制舱项目",
+      "client": "示例客户B公司",
+      "industry": "电力",
+      "product_type": "预制舱",
+      "amount": 800000,
+      "year": 2024,
+      "description": "这是一个示例项目，用于演示系统功能",
+      "created_at": "2024-01-01T00:00:00"
+    }
+  ]
+}

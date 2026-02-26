@@ -1,0 +1,25 @@
+{
+  "management": [
+    {
+      "id": 1,
+      "name": "示例技术总监",
+      "role": "技术总监",
+      "title": "高级工程师",
+      "experience": 20,
+      "certificates": ["注册电气工程师"],
+      "created_at": "2024-01-01T00:00:00"
+    }
+  ],
+  "engineers": [
+    {
+      "id": 2,
+      "name": "示例项目经理",
+      "role": "项目经理",
+      "title": "工程师",
+      "experience": 10,
+      "certificates": ["一级建造师"],
+      "created_at": "2024-01-01T00:00:00"
+    }
+  ],
+  "workers": []
+}

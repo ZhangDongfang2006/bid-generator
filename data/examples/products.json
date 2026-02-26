@@ -1,0 +1,32 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "示例高压开关柜",
+      "model": "EXAMPLE-KYN28A-12",
+      "category": "高压开关柜",
+      "description": "这是一个示例产品，用于演示系统功能",
+      "base_price": 50000
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 2,
+      "name": "示例低压开关柜",
+      "model": "EXAMPLE-MNS",
+      "category": "低压开关柜",
+      "description": "这是一个示例产品，用于演示系统功能",
+      "base_price": 30000,
+      "created_at": "2024-01-01T00:00:00"
+    },
+    {
+      "id": 3,
+      "name": "示例箱式变电站",
+      "model": "EXAMPLE-ZGS11",
+      "category": "预制舱",
+      "description": "这是一个示例产品，用于演示系统功能",
+      "base_price": 80000,
+      "created_at": "2024-01-01T00:00:00"
+    }
+  ],
+  "prices": {}
+}
