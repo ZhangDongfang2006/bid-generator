@@ -107,10 +107,10 @@ class BidDocumentGenerator:
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            self._add_quality_control_plan(doc)
-            self._add_safety_guarantee(doc)
-            self._add_delivery_plan(doc)
-            self._add_training_and_service(doc)
+            add_quality_control_plan(doc)
+            add_safety_guarantee(doc)
+            add_delivery_plan(doc)
+            add_training_and_service(doc)
         
         self._add_quotation(doc, quote_data if quote_data else {})
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
@@ -163,16 +163,16 @@ class BidDocumentGenerator:
         
         # 添加公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            self._add_compliance_statement(doc)
-            self._add_quality_control_plan(doc)
-            self._add_safety_guarantee(doc)
+            add_compliance_statement(doc)
+            add_quality_control_plan(doc)
+            add_safety_guarantee(doc)
         
         self._add_equipment_specs_table(doc, self.templates_dir.parent / "data")
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            self._add_delivery_plan(doc)
-            self._add_training_and_service(doc)
+            add_delivery_plan(doc)
+            add_training_and_service(doc)
         
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
         self._add_performance(doc, matched_data.get("cases", []))
