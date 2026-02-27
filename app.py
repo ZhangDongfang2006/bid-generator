@@ -72,6 +72,16 @@ if 'bid_generated' not in st.session_state:
 
 if 'active_page' not in st.session_state:
     st.session_state.active_page = 'main'
+    # 初始化配置
+    if 'config' not in st.session_state:
+        st.session_state.config = {
+            'tenderer': '上海国际招标有限公司',
+            'project_no': '2401071015',
+            'project_amount': '5723291',
+            'project_tax_rate': '13%',
+            'rep_name': '阎海',
+            'rep_title': '投标中心主任'
+        }
 
 # ==================== 主界面 ====================
 
