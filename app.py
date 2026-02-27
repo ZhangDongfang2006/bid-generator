@@ -202,6 +202,83 @@ else:
             st.markdown("### 📌 项目信息")
             st.markdown(f"**项目名称**: {project_name}")
 
+            # 项目编号
+            project_no = st.text_input(
+                "项目编号",
+                value="2401071015",
+                help="招标文件中的项目编号"
+            )
+
+            # 项目全称
+            project_full_name = st.text_input(
+                "项目全称",
+                value=f"{st.session_state.config.get('tenderer', '上海国际招标有限公司')}{project_name}",
+                help="项目的完整名称"
+            )
+
+            # 招标人
+            tenderer = st.text_input(
+                "招标人",
+                value=st.session_state.config.get('tenderer', '上海国际招标有限公司'),
+                help="招标单位名称"
+            )
+
+            # 项目金额
+            project_amount = st.text_input(
+                "项目金额",
+                value="5723291",
+                help="项目总金额（元）"
+            )
+
+            # 投标金额
+            bid_amount = st.text_input(
+                "投标金额",
+                value="5723291",
+                help="投标总金额（元）"
+            )
+
+            # 投标金额大写
+            bid_amount_upper = st.text_input(
+                "投标金额大写",
+                value="伍佰柒拾贰万叁仟贰佰玖拾壹",
+                help="投标总金额大写"
+            )
+
+            # 税率
+            tax_rate = st.text_input(
+                "税率",
+                value="13%",
+                help="增值税税率"
+            )
+
+            # 法定代表人信息
+            st.markdown("---")
+            st.markdown("### 👤 法定代表人信息")
+            
+            rep_name = st.text_input(
+                "法定代表人姓名",
+                value="阎海",
+                help="法定代表人姓名"
+            )
+
+            rep_title = st.text_input(
+                "法定代表人职务",
+                value="投标中心主任",
+                help="法定代表人职务"
+            )
+
+            # 更新项目信息
+            st.session_state.tender_info['project_info'] = {
+                'project_name': project_name,
+                'project_no': project_no,
+                'project_full_name': project_full_name,
+                'tenderer': tenderer,
+                'project_amount': project_amount,
+                'project_tax_rate': tax_rate,
+                'bid_amount': bid_amount,
+                'bid_amount_upper': bid_amount_upper,
+            }
+
         # 显示解析出的需求
         st.markdown(f"**提取需求**: {len(parse_result.requirements)}")
         
