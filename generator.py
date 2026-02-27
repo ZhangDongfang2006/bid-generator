@@ -1174,7 +1174,7 @@ class BidDocumentGenerator:
     def _add_equipment_specs_table(self, doc: Document, data_dir: Path):
         """添加设备说明一览表"""
         p = doc.add_paragraph()
-        run = p.add_run("第2.3章 主要设备说明一览表")
+        run = p.add_run("十、设备说明一览表")
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
