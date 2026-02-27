@@ -42,6 +42,24 @@ except ImportError as e:
     import sys
     sys.exit(1)  # 退出程序，因为现在默认启用PDF转图片功能
 
+# 导入公司通用内容生成方法
+try:
+    from company_content import (
+        add_legal_authorization,
+        add_bid_guarantee,
+        add_warranty_commitment,
+        add_compliance_statement,
+        add_quality_control_plan,
+        add_safety_guarantee,
+        add_delivery_plan,
+        add_training_and_service
+    )
+    COMPANY_CONTENT_AVAILABLE = True
+except ImportError as e:
+    COMPANY_CONTENT_AVAILABLE = False
+    print(f"⚠️ 警告: company_content 模块未安装: {e}")
+    print("将不生成公司通用内容章节")
+
 
 class BidDocumentGenerator:
     """投标文件生成器 - V2 (PDF转图片版）"""
@@ -78,6 +96,22 @@ class BidDocumentGenerator:
         self._add_deviation_table(doc, tender_info, table_type="技术")
         self._add_company_intro_v2(doc, company_info)
         self._add_tech_solution(doc, tender_info, matched_data)
+        
+        # 添加公司通用内容
+        if COMPANY_CONTENT_AVAILABLE:
+            self._add_legal_authorization(doc)
+            self._add_bid_guarantee(doc)
+            self._add_warranty_commitment(doc)
+        
+        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data")
+        
+        # 添加更多公司通用内容
+        if COMPANY_CONTENT_AVAILABLE:
+            self._add_quality_control_plan(doc)
+            self._add_safety_guarantee(doc)
+            self._add_delivery_plan(doc)
+            self._add_training_and_service(doc)
+        
         self._add_quotation(doc, quote_data if quote_data else {})
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
         self._add_performance(doc, matched_data.get("cases", []))
@@ -126,6 +160,20 @@ class BidDocumentGenerator:
         self._add_deviation_table(doc, tender_info, table_type="技术")
         self._add_company_intro_v2(doc, company_info)
         self._add_tech_solution(doc, tender_info, matched_data)
+        
+        # 添加公司通用内容
+        if COMPANY_CONTENT_AVAILABLE:
+            self._add_compliance_statement(doc)
+            self._add_quality_control_plan(doc)
+            self._add_safety_guarantee(doc)
+        
+        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data")
+        
+        # 添加更多公司通用内容
+        if COMPANY_CONTENT_AVAILABLE:
+            self._add_delivery_plan(doc)
+            self._add_training_and_service(doc)
+        
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
         self._add_performance(doc, matched_data.get("cases", []))
         self._add_tech_commitment(doc)
@@ -451,54 +499,161 @@ class BidDocumentGenerator:
     # ==================== 添加章节的方法 ====================
 
     def _add_cover_v2(self, doc: Document, tender_info: Dict, company_info: Dict, bid_type: str = "投标文件"):
-        """添加封面 - V2（符合公司标准格式）"""
+        """添加封面 - V3（符合参考PDF投标函格式）"""
         project_info = tender_info.get("project_info", {})
         project_name = project_info.get("project_name", "")
         project_no = project_info.get("project_no", "未知项目编号")
         tenderer = project_info.get("tenderer", "贵公司")
-        project_name_full = project_info.get("project_full_name", f"{tenderer}{project_name}")
+        project_full_name = project_info.get("project_full_name", f"{tenderer}{project_name}")
+        project_amount = project_info.get("project_amount", "")
+        project_tax_rate = project_info.get("project_tax_rate", "13%")
+        bid_amount = project_info.get("bid_amount", "")
+        bid_amount_upper = project_info.get("bid_amount_upper", "")
 
-        # 标题
+        # 公司信息
+        company_name = company_info.get("name", "")
+        company_address = company_info.get("address", "")
+        company_phone = company_info.get("phone", "")
+        company_email = company_info.get("email", "")
+        company_rep_name = company_info.get("rep_name", "阎海")
+        company_rep_title = company_info.get("rep_title", "投标中心主任")
+
+        # 日期
+        today = datetime.now()
+        date_str = today.strftime('%Y年%m月%d日')
+
+        # 添加封面标题
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run(f"项目编号：{project_no}")
+        run = p.add_run(f"一、投标函")
         run.bold = True
-        run.font.size = Pt(18)
-        run.font.name = "黑体"
-
-        # 项目名称和招标人
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run(f"[{tenderer}]\n{project_name_full}]")
-        run.bold = True
-        run.font.size = Pt(20)
-        run.font.name = "黑体"
-
-        # 投标类型
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run(f"[{bid_type}]")
-        run.bold = True
-        run.font.size = Pt(18)
-        run.font.name = "黑体"
-
-        # 分隔线
-        for _ in range(3):
-            doc.add_paragraph()
-
-        # 申请人
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run(f"申请人：{company_info['name']}（盖单位章）")
         run.font.size = Pt(16)
         run.font.name = "黑体"
 
-        # 日期
+        doc.add_paragraph()
+
+        # 投标函内容
         p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run(f"日期：{datetime.now().strftime('%Y年%m月%d日')}")
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run(f"致：{tenderer}")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        doc.add_paragraph()
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        text = f"根据贵方{project_full_name}的投标邀请书（项目编号为：{project_no}），现正式授权的下列签字人{company_rep_name}、{company_rep_title}（姓名和职务）代表投标人{company_name}，提交下述投标文件正本1 份，副本4 份："
+        run = p.add_run(text)
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        doc.add_paragraph()
+
+        # 投标文件清单
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        bid_files = [
+            "（1）金额为壹拾万元人民币的投标保证金；",
+            "（2）资格证明文件；",
+            "（3）投标报价表；",
+            "（4）"投标人须知"第8 条要求投标人提交的全部文件。"
+        ]
+        
+        for i, bid_file in enumerate(bid_files, 1):
+            p = doc.add_paragraph()
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.paragraph_format.first_line_indent = Inches(0.5)  # 首行缩进
+            run = p.add_run(bid_file)
+            run.font.size = Pt(14)
+            run.font.name = "宋体"
+
+        doc.add_paragraph()
+
+        # 投标人确认事项
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run("据此函，签字人兹宣布同意如下：")
+        run.bold = True
         run.font.size = Pt(14)
         run.font.name = "黑体"
+
+        doc.add_paragraph()
+
+        # 确认事项列表
+        confirmations = [
+            f"a）按招标文件的规定提交设备及提供伴随服务的投标总价为人民币（大写）{bid_amount_upper}（{bid_amount} 元整），其中，税率{project_tax_rate}。",
+            "b）我们将按招标文件的规定，承担完成合同规定的责任和义务。",
+            "c）我们已详细审核了全部招标文件，包括招标文件的补充文件（如果有的话），我们知道必须放弃对上述文件中所有条款提出存有含糊不清或不理解之问题的权利。",
+            "d）我们同意在"投标人须知"第21 条所述的开标日期起遵循本投标文件的规定，并在"投标人须知"第15 条规定的投标有效期届满之前对我方均具有约束力，而且有可能中标。",
+            "e）如果在开标后规定的投标有效期内撤销投标，我们的投标保证金可不予退还。",
+            "f）如果贵方有要求，我们愿意进一步提供与本投标有关的任何证据或资料。",
+            "g）我们完全理解贵方不一定要接受最低报价的投标或收到的任何投标。"
+        ]
+
+        for confirmation in confirmations:
+            p = doc.add_paragraph()
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.paragraph_format.first_line_indent = Inches(0.5)  # 首行缩进
+            run = p.add_run(confirmation)
+            run.font.size = Pt(14)
+            run.font.name = "宋体"
+
+        doc.add_paragraph()
+
+        # 正式通讯地址
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run("与本投标有关的正式通讯地址为：")
+        run.bold = True
+        run.font.size = Pt(14)
+        run.font.name = "黑体"
+
+        doc.add_paragraph()
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run(f"地址：{company_address}")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run(f"邮政编码：{company_info.get('postcode', '432999')}")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run(f"电话号码：{company_phone}")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        # 签字和盖章区域
+        doc.add_paragraph()
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run("投标人法定代表人或其授权代表签字或盖章：")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        doc.add_paragraph()
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run("投标人单位公章：")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
+
+        # 日期
+        doc.add_paragraph()
+
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        run = p.add_run(f"日期：{date_str}")
+        run.font.size = Pt(14)
+        run.font.name = "宋体"
 
         doc.add_page_break()
 
@@ -1016,6 +1171,106 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
+    def _add_equipment_specs_table(self, doc: Document, data_dir: Path):
+        """添加设备说明一览表"""
+        p = doc.add_paragraph()
+        run = p.add_run("第2.3章 主要设备说明一览表")
+        run.bold = True
+        run.font.size = Pt(16)
+        run.font.name = "黑体"
+
+        doc.add_paragraph()
+
+        # 加载设备规格数据
+        equipment_file = data_dir / "equipment_specs.json"
+        
+        if equipment_file.exists():
+            import json
+            try:
+                with open(equipment_file, 'r', encoding='utf-8') as f:
+                    equipment_data = json.load(f)
+                    equipment_specs = equipment_data.get('equipment_specs', [])
+                
+                if not equipment_specs:
+                    doc.add_paragraph("暂无设备规格数据")
+                    doc.add_page_break()
+                    return
+                
+                # 按类别分组
+                categories = {}
+                for equipment in equipment_specs:
+                    category = equipment.get('category', '其他')
+                    if category not in categories:
+                        categories[category] = []
+                    categories[category].append(equipment)
+                
+                # 为每个类别创建表格
+                for category, items in categories.items():
+                    # 添加类别标题
+                    p = doc.add_paragraph()
+                    run = p.add_run(category)
+                    run.bold = True
+                    run.font.size = Pt(14)
+                    run.font.name = "黑体"
+                    doc.add_paragraph()
+                    
+                    # 创建表格（11列：序号、符号、名称、型号、规格、材质、厚度、重量、单位、数量、生产厂家、备注）
+                    table = doc.add_table(rows=len(items) + 1, cols=12)
+                    table.style = 'Light Grid Accent 1'
+                    
+                    # 设置表头
+                    headers = ['序号', '符号', '名称', '型号', '规格', '材质', '厚度', '重量(KG)', '单位', '数量', '生产厂家', '备注']
+                    for col_idx, header in enumerate(headers):
+                        cell = table.rows[0].cells[col_idx]
+                        cell.text = header
+                        # 设置表头样式
+                        for paragraph in cell.paragraphs:
+                            for run in paragraph.runs:
+                                run.bold = True
+                                run.font.size = Pt(10)
+                                run.font.name = "宋体"
+                    
+                    # 填充数据
+                    for row_idx, equipment in enumerate(items, start=1):
+                        row = table.rows[row_idx]
+                        
+                        cells = [
+                            str(equipment.get('sequence', '')),
+                            equipment.get('symbol', ''),
+                            equipment.get('name', ''),
+                            equipment.get('model', ''),
+                            equipment.get('specifications', ''),
+                            equipment.get('material', ''),
+                            equipment.get('thickness', ''),
+                            str(equipment.get('weight', '')) if equipment.get('weight') is not None else '',
+                            equipment.get('unit', ''),
+                            str(equipment.get('quantity', '')),
+                            equipment.get('manufacturer', ''),
+                            equipment.get('remarks', '')
+                        ]
+                        
+                        for col_idx, cell_text in enumerate(cells):
+                            cell = row.cells[col_idx]
+                            cell.text = cell_text
+                            # 设置数据样式
+                            for paragraph in cell.paragraphs:
+                                for run in paragraph.runs:
+                                    run.font.size = Pt(9)
+                                    run.font.name = "宋体"
+                    
+                    # 类别之间添加空行
+                    doc.add_paragraph()
+                
+                doc.add_page_break()
+                
+            except Exception as e:
+                print(f"✗ 加载设备规格数据失败: {e}")
+                doc.add_paragraph("设备规格数据加载失败")
+                doc.add_page_break()
+        else:
+            doc.add_paragraph("设备规格数据文件不存在")
+            doc.add_page_break()
+
     def _add_qualifications_v2(self, doc: Document, qualifications: List[Dict]):
         """添加资质文件 - V2（升级版，显示文件路径）"""
         p = doc.add_paragraph()
@@ -1356,7 +1611,8 @@ class BidDocumentGenerator:
                 ("1.8", "公司概况", "8"),
                 ("1.9", "技术方案", "9"),
                 ("1.10", "项目团队", "10"),
-                ("1.11", "技术承诺", "11"),
+                ("1.11", "设备说明一览表", "11"),
+                ("1.12", "技术承诺", "12"),
                 ("", "", ""),
                 ("2.", "商务标", "12"),
                 ("2.1", "封面", "13"),
@@ -1378,13 +1634,14 @@ class BidDocumentGenerator:
                 ("7.", "技术偏离表", "7"),
                 ("8.", "公司概况", "8"),
                 ("9.", "技术方案", "9"),
-                ("10.", "项目团队", "10"),
-                ("11.", "技术承诺", "11"),
-                ("12.", "资质证书", "12"),
-                ("13.", "项目案例", "13"),
-                ("14.", "报价说明", "14"),
-                ("15.", "售后服务", "15"),
-                ("16.", "承诺", "16"),
+                ("10.", "设备说明一览表", "10"),
+                ("11.", "资质证书", "11"),
+                ("12.", "项目案例", "12"),
+                ("13.", "报价说明", "13"),
+                ("14.", "售后服务", "14"),
+                ("15.", "技术承诺", "15"),
+                ("16.", "响应承诺", "16"),
+                ("17.", "商务承诺", "17"),
             ])
 
         # 创建表格形式的目录
