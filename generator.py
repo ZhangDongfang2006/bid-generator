@@ -60,6 +60,15 @@ except ImportError as e:
     print(f"⚠️ 警告: company_content 模块未安装: {e}")
     print("将不生成公司通用内容章节")
 
+# 导入章节编号模块
+try:
+    from add_chapter_numbers import get_chapter_title
+    CHAPTER_NUMBERS_AVAILABLE = True
+except ImportError as e:
+    CHAPTER_NUMBERS_AVAILABLE = False
+    print(f"⚠️ 警告: add_chapter_numbers 模块未安装: {e}")
+    print("章节标题将不会自动添加编号")
+
 
 class BidDocumentGenerator:
     """投标文件生成器 - V2 (PDF转图片版）"""
@@ -85,25 +94,27 @@ class BidDocumentGenerator:
         Returns:
             生成的文件路径
         """
+        bid_type = "单一文件"
+        
         # 创建新文档
         doc = Document()
 
         # 生成各个章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="投标文件")
         self._add_table_of_contents(doc, separate_bids=False)  # 修改：添加目录
-        self._add_company_proof(doc, company_info)
-        self._add_bid纲领_v2(doc, company_info, tender_info)
-        self._add_deviation_table(doc, tender_info, table_type="技术")
-        self._add_company_intro_v2(doc, company_info)
-        self._add_tech_solution(doc, tender_info, matched_data)
+        self._add_company_proof(doc, company_info, bid_type)
+        self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
+        self._add_deviation_table(doc, tender_info, table_type="技术", bid_type=bid_type)
+        self._add_company_intro_v2(doc, company_info, bid_type)
+        self._add_tech_solution(doc, tender_info, matched_data, bid_type)
         
         # 添加公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            self._add_legal_authorization(doc)
-            self._add_bid_guarantee(doc)
-            self._add_warranty_commitment(doc)
+            add_legal_authorization(doc)
+            add_bid_guarantee(doc)
+            add_warranty_commitment(doc)
         
-        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data")
+        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data", bid_type)
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
@@ -112,10 +123,10 @@ class BidDocumentGenerator:
             add_delivery_plan(doc)
             add_training_and_service(doc)
         
-        self._add_quotation(doc, quote_data if quote_data else {})
-        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
-        self._add_performance(doc, matched_data.get("cases", []))
-        self._add_after_sales(doc, company_info)
+        self._add_quotation(doc, quote_data if quote_data else {}, bid_type)
+        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images, bid_type)
+        self._add_performance(doc, matched_data.get("cases", []), bid_type)
+        self._add_after_sales(doc, company_info, bid_type)
 
         # 设置页码
         self._setup_page_numbers(doc)
@@ -149,17 +160,19 @@ class BidDocumentGenerator:
         Returns:
             生成的文件路径
         """
+        bid_type = "技术标"
+        
         # 创建新文档
         doc = Document()
 
         # 生成技术标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="技术投标文件")
         self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
-        self._add_company_proof(doc, company_info)
-        self._add_bid纲领_v2(doc, company_info, tender_info)
-        self._add_deviation_table(doc, tender_info, table_type="技术")
-        self._add_company_intro_v2(doc, company_info)
-        self._add_tech_solution(doc, tender_info, matched_data)
+        self._add_company_proof(doc, company_info, bid_type)
+        self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
+        self._add_deviation_table(doc, tender_info, table_type="技术", bid_type=bid_type)
+        self._add_company_intro_v2(doc, company_info, bid_type)
+        self._add_tech_solution(doc, tender_info, matched_data, bid_type)
         
         # 添加公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
@@ -167,17 +180,17 @@ class BidDocumentGenerator:
             add_quality_control_plan(doc)
             add_safety_guarantee(doc)
         
-        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data")
+        self._add_equipment_specs_table(doc, self.templates_dir.parent / "data", bid_type)
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
             add_delivery_plan(doc)
             add_training_and_service(doc)
         
-        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
-        self._add_performance(doc, matched_data.get("cases", []))
-        self._add_tech_commitment(doc)
-        self._add_response_commitment(doc)
+        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images, bid_type)
+        self._add_performance(doc, matched_data.get("cases", []), bid_type)
+        self._add_tech_commitment(doc, bid_type)
+        self._add_response_commitment(doc, bid_type)
 
         # 保存文件
         project_name = tender_info.get("project_info", {}).get("project_name", "未知项目")
@@ -208,22 +221,24 @@ class BidDocumentGenerator:
         Returns:
             生成的文件路径
         """
+        bid_type = "商务标"
+        
         # 创建新文档
         doc = Document()
 
         # 生成商务标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="商务投标文件")
         self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
-        self._add_company_proof(doc, company_info)
-        self._add_bid纲领_v2(doc, company_info, tender_info)
-        self._add_deviation_table(doc, tender_info, table_type="商务")
-        self._add_company_intro_v2(doc, company_info)
-        self._add_response_commitment(doc)
-        self._add_quotation(doc, quote_data if quote_data else {})
-        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images)
-        self._add_performance(doc, matched_data.get("cases", []))
-        self._add_after_sales(doc, company_info)
-        self._add_commercial_commitment(doc)
+        self._add_company_proof(doc, company_info, bid_type)
+        self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
+        self._add_deviation_table(doc, tender_info, table_type="商务", bid_type=bid_type)
+        self._add_company_intro_v2(doc, company_info, bid_type)
+        self._add_response_commitment(doc, bid_type)
+        self._add_quotation(doc, quote_data if quote_data else {}, bid_type)
+        self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images, bid_type)
+        self._add_performance(doc, matched_data.get("cases", []), bid_type)
+        self._add_after_sales(doc, company_info, bid_type)
+        self._add_commercial_commitment(doc, bid_type)
 
         # 保存文件
         project_name = tender_info.get("project_info", {}).get("project_name", "未知项目")
@@ -657,10 +672,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_company_proof(self, doc: Document, company_info: Dict):
+    def _add_company_proof(self, doc: Document, company_info: Dict, bid_type: str = "单一文件"):
         """添加公司证明"""
         p = doc.add_paragraph()
-        run = p.add_run("公司证明")
+        title = "公司概况"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -681,10 +699,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_bid纲领_v2(self, doc: Document, company_info: Dict, tender_info: Dict):
+    def _add_bid纲领_v2(self, doc: Document, company_info: Dict, tender_info: Dict, bid_type: str = "单一文件"):
         """添加投标纲领"""
         p = doc.add_paragraph()
-        run = p.add_run("投标纲领")
+        title = "投标纲领"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -705,10 +726,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_deviation_table(self, doc: Document, tender_info: Dict, table_type: str = "技术"):
+    def _add_deviation_table(self, doc: Document, tender_info: Dict, table_type: str = "技术", bid_type: str = "单一文件"):
         """添加偏离表 - 新增"""
         p = doc.add_paragraph()
-        run = p.add_run(f"第1章 {table_type}偏离表")
+        title = f"{table_type}偏离表"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -749,10 +773,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_company_intro_v2(self, doc: Document, company_info: Dict):
+    def _add_company_intro_v2(self, doc: Document, company_info: Dict, bid_type: str = "单一文件"):
         """添加公司介绍 - V2（升级版）"""
         p = doc.add_paragraph()
-        run = p.add_run("企业简介")
+        title = "公司简介"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -791,10 +818,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_tech_solution(self, doc: Document, tender_info: Dict, matched_data: Dict):
+    def _add_tech_solution(self, doc: Document, tender_info: Dict, matched_data: Dict, bid_type: str = "单一文件"):
         """添加技术方案"""
         p = doc.add_paragraph()
-        run = p.add_run("第2章 方案建议书")
+        title = "技术方案"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -868,7 +898,7 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_qualifications_with_images(self, doc: Document, qualifications: List[Dict], data_dir: Path, show_cert_images: bool = False):
+    def _add_qualifications_with_images(self, doc: Document, qualifications: List[Dict], data_dir: Path, show_cert_images: bool = False, bid_type: str = "单一文件"):
         """
         添加企业资质（支持PDF转图片）
 
@@ -882,14 +912,17 @@ class BidDocumentGenerator:
         - 文件会大一些
         """
         # 直接使用PDF转图片版本
-        self._add_qualifications_with_pdf_images(doc, qualifications, data_dir)
+        self._add_qualifications_with_pdf_images(doc, qualifications, data_dir, bid_type)
 
-    def _add_qualifications_with_pdf_images(self, doc: Document, qualifications: List[Dict], data_dir: Path):
+    def _add_qualifications_with_pdf_images(self, doc: Document, qualifications: List[Dict], data_dir: Path, bid_type: str = "单一文件"):
         """
         添加企业资质（PDF转图片）
         """
         p = doc.add_paragraph()
-        run = p.add_run("第3章 企业资质")
+        title = "资质证书"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1171,10 +1204,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_equipment_specs_table(self, doc: Document, data_dir: Path):
+    def _add_equipment_specs_table(self, doc: Document, data_dir: Path, bid_type: str = "单一文件"):
         """添加设备说明一览表"""
         p = doc.add_paragraph()
-        run = p.add_run("十、设备说明一览表")
+        title = "设备说明一览表"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1372,10 +1408,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_performance(self, doc: Document, cases: List[Dict]):
+    def _add_performance(self, doc: Document, cases: List[Dict], bid_type: str = "单一文件"):
         """添加类似业绩"""
         p = doc.add_paragraph()
-        run = p.add_run("第4章 类似业绩")
+        title = "项目案例"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1412,10 +1451,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_quotation(self, doc: Document, quote_data: Dict):
+    def _add_quotation(self, doc: Document, quote_data: Dict, bid_type: str = "单一文件"):
         """添加报价单"""
         p = doc.add_paragraph()
-        run = p.add_run("报价明细")
+        title = "报价说明"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1465,10 +1507,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_after_sales(self, doc: Document, company_info: Dict):
+    def _add_after_sales(self, doc: Document, company_info: Dict, bid_type: str = "单一文件"):
         """添加售后服务"""
         p = doc.add_paragraph()
-        run = p.add_run("售后服务")
+        title = "售后服务"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1508,10 +1553,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_tech_commitment(self, doc: Document):
+    def _add_tech_commitment(self, doc: Document, bid_type: str = "单一文件"):
         """添加技术承诺"""
         p = doc.add_paragraph()
-        run = p.add_run("技术承诺")
+        title = "技术承诺"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1532,10 +1580,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_response_commitment(self, doc: Document):
+    def _add_response_commitment(self, doc: Document, bid_type: str = "单一文件"):
         """添加响应承诺"""
         p = doc.add_paragraph()
-        run = p.add_run("响应承诺")
+        title = "响应承诺"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
@@ -1556,10 +1607,13 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_commercial_commitment(self, doc: Document):
+    def _add_commercial_commitment(self, doc: Document, bid_type: str = "单一文件"):
         """添加商务承诺"""
         p = doc.add_paragraph()
-        run = p.add_run("商务承诺")
+        title = "商务承诺"
+        if CHAPTER_NUMBERS_AVAILABLE:
+            title = get_chapter_title(title, bid_type)
+        run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
         run.font.name = "黑体"
