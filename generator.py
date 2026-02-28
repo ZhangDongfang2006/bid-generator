@@ -110,18 +110,18 @@ class BidDocumentGenerator:
         
         # 添加公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            add_legal_authorization(doc)
-            add_bid_guarantee(doc)
-            add_warranty_commitment(doc)
+            add_legal_authorization(doc, bid_type)
+            add_bid_guarantee(doc, bid_type)
+            add_warranty_commitment(doc, bid_type)
         
         self._add_equipment_specs_table(doc, self.templates_dir.parent / "data", bid_type)
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            add_quality_control_plan(doc)
-            add_safety_guarantee(doc)
-            add_delivery_plan(doc)
-            add_training_and_service(doc)
+            add_quality_control_plan(doc, bid_type)
+            add_safety_guarantee(doc, bid_type)
+            add_delivery_plan(doc, bid_type)
+            add_training_and_service(doc, bid_type)
         
         self._add_quotation(doc, quote_data if quote_data else {}, bid_type)
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images, bid_type)
@@ -176,16 +176,16 @@ class BidDocumentGenerator:
         
         # 添加公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            add_compliance_statement(doc)
-            add_quality_control_plan(doc)
-            add_safety_guarantee(doc)
+            add_compliance_statement(doc, bid_type)
+            add_quality_control_plan(doc, bid_type)
+            add_safety_guarantee(doc, bid_type)
         
         self._add_equipment_specs_table(doc, self.templates_dir.parent / "data", bid_type)
         
         # 添加更多公司通用内容
         if COMPANY_CONTENT_AVAILABLE:
-            add_delivery_plan(doc)
-            add_training_and_service(doc)
+            add_delivery_plan(doc, bid_type)
+            add_training_and_service(doc, bid_type)
         
         self._add_qualifications_with_images(doc, matched_data.get("qualifications", []), self.templates_dir.parent / "data", show_cert_images, bid_type)
         self._add_performance(doc, matched_data.get("cases", []), bid_type)
@@ -1653,28 +1653,32 @@ class BidDocumentGenerator:
         
         if separate_bids:
             # 技术标和商务标分开
+            # 技术标目录
             contents.extend([
-                ("1.", "技术标", "1"),
                 ("1.1", "封面", "1"),
-                ("1.2", "公司概况", "2"),
-                ("1.3", "公司简介", "3"),
-                ("1.4", "公司资质", "4"),
-                ("1.5", "公司业绩", "5"),
-                ("1.6", "投标纲领", "6"),
-                ("1.7", "技术偏离表", "7"),
-                ("1.8", "公司概况", "8"),
-                ("1.9", "技术方案", "9"),
-                ("1.10", "项目团队", "10"),
+                ("1.2", "目录", "2"),
+                ("1.3", "公司概况", "3"),
+                ("1.4", "投标纲领", "4"),
+                ("1.5", "技术偏离表", "5"),
+                ("1.6", "公司简介", "6"),
+                ("1.7", "技术方案", "7"),
+                ("1.8", "近三年无重大违法记录声明", "8"),
+                ("1.9", "质量控制专项方案", "9"),
+                ("1.10", "安全保证", "10"),
                 ("1.11", "设备说明一览表", "11"),
-                ("1.12", "技术承诺", "12"),
+                ("1.12", "供货组织及进度计划", "12"),
+                ("1.13", "技术培训、售后服务", "13"),
+                ("1.14", "资质证书", "14"),
+                ("1.15", "项目案例", "15"),
+                ("1.16", "技术承诺", "16"),
+                ("1.17", "响应承诺", "17"),
                 ("", "", ""),
-                ("2.", "商务标", "12"),
-                ("2.1", "封面", "13"),
-                ("2.2", "公司概况", "14"),
-                ("2.3", "投标纲领", "15"),
-                ("2.4", "商务偏离表", "16"),
-                ("2.5", "报价说明", "17"),
-                ("2.6", "商务承诺", "18"),
+                ("2.1", "封面", "18"),
+                ("2.2", "公司概况", "19"),
+                ("2.3", "投标纲领", "20"),
+                ("2.4", "商务偏离表", "21"),
+                ("2.5", "报价说明", "22"),
+                ("2.6", "商务承诺", "23"),
             ])
         else:
             # 单一文件
