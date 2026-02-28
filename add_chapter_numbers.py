@@ -114,7 +114,7 @@ def get_chapter_title(title: str, bid_type: str = '单一文件'):
     
     # 查找对应的编号（处理没有编号的标题）
     for key, number in chapter_numbers.get(bid_type, {}).items():
-        if key in title:
+        if title == key:  # 使用精确匹配，而不是子字符串匹配
             return f"{number} {title}"
     
     # 如果没有找到编号，返回原标题

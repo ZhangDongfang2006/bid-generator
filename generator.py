@@ -101,7 +101,7 @@ class BidDocumentGenerator:
 
         # 生成各个章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="投标文件")
-        self._add_table_of_contents(doc, separate_bids=False)  # 修改：添加目录
+        self._add_table_of_contents(doc, separate_bids=False, bid_type=bid_type)  # 修改：添加目录
         self._add_company_proof(doc, company_info, bid_type)
         self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
         self._add_deviation_table(doc, tender_info, table_type="技术", bid_type=bid_type)
@@ -167,7 +167,7 @@ class BidDocumentGenerator:
 
         # 生成技术标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="技术投标文件")
-        self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
+        self._add_table_of_contents(doc, separate_bids=True, bid_type="技术标")  # 修改：添加目录
         self._add_company_proof(doc, company_info, bid_type)
         self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
         self._add_deviation_table(doc, tender_info, table_type="技术", bid_type=bid_type)
@@ -228,7 +228,7 @@ class BidDocumentGenerator:
 
         # 生成商务标章节
         self._add_cover_v2(doc, tender_info, company_info, bid_type="商务投标文件")
-        self._add_table_of_contents(doc, separate_bids=True)  # 新增：添加目录
+        self._add_table_of_contents(doc, separate_bids=True, bid_type="商务标")  # 修改：添加目录
         self._add_company_proof(doc, company_info, bid_type)
         self._add_bid纲领_v2(doc, company_info, tender_info, bid_type)
         self._add_deviation_table(doc, tender_info, table_type="商务", bid_type=bid_type)
@@ -1634,8 +1634,14 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
-    def _add_table_of_contents(self, doc: Document, separate_bids: bool = False):
-        """添加目录（动态生成）"""
+    def _add_table_of_contents(self, doc: Document, separate_bids: bool = False, bid_type: str = "单一文件"):
+        """添加目录（动态生成）
+        
+        Args:
+            doc: 文档对象
+            separate_bids: 是否分开技术标和商务标
+            bid_type: 投标类型（单一文件、技术标、商务标）
+        """
         doc.add_page_break()
         
         # 添加目录标题
@@ -1651,8 +1657,7 @@ class BidDocumentGenerator:
         # 动态生成目录内容
         contents = []
         
-        if separate_bids:
-            # 技术标和商务标分开
+        if separate_bids and bid_type == "技术标":
             # 技术标目录
             contents.extend([
                 ("1.1", "封面", "1"),
@@ -1672,13 +1677,16 @@ class BidDocumentGenerator:
                 ("1.15", "项目案例", "15"),
                 ("1.16", "技术承诺", "16"),
                 ("1.17", "响应承诺", "17"),
-                ("", "", ""),
-                ("2.1", "封面", "18"),
-                ("2.2", "公司概况", "19"),
-                ("2.3", "投标纲领", "20"),
-                ("2.4", "商务偏离表", "21"),
-                ("2.5", "报价说明", "22"),
-                ("2.6", "商务承诺", "23"),
+            ])
+        elif separate_bids and bid_type == "商务标":
+            # 商务标目录
+            contents.extend([
+                ("2.1", "封面", "1"),
+                ("2.2", "公司概况", "2"),
+                ("2.3", "投标纲领", "3"),
+                ("2.4", "商务偏离表", "4"),
+                ("2.5", "报价说明", "5"),
+                ("2.6", "商务承诺", "6"),
             ])
         else:
             # 单一文件
