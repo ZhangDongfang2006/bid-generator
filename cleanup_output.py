@@ -30,7 +30,8 @@ def cleanup_output(output_dir: str = "output", keep_count: int = 10):
     
     print(f"\n{'='*60}")
     print(f"开始清理输出目录: {output_dir}")
-    print(f"保留最新 {keep_count} 份文件")
+    print(f"⚠️  只清理投标文件（.docx），其他文件暂不清理")
+    print(f"保留最新 {keep_count} 份投标文件")
     print(f"{'='*60}\n")
     
     # 创建 archive 目录
