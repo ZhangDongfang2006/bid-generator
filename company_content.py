@@ -26,7 +26,14 @@ def read_temp_file(filename: str) -> str:
 
 
 def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str = '单一文件'):
-    """从文本内容添加章节到文档"""
+    """从文本内容添加章节到文档
+    
+    Args:
+        doc: 文档对象
+        title: 主章节标题
+        content: 章节内容
+        bid_type: 投标类型
+    """
     # 导入 get_chapter_title 函数
     try:
         from add_chapter_numbers import get_chapter_title
@@ -34,6 +41,11 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
         title = get_chapter_title(title, bid_type)
     except ImportError:
         pass
+    
+    # 提取主章节编号（如 "7. 技术方案" → "7."）
+    import re
+    match = re.match(r'^(\d+\.)\s', title)
+    chapter_number = match.group(1) if match else ''
     
     # 添加章节标题
     p = doc.add_paragraph()
@@ -45,6 +57,7 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
     doc.add_paragraph()
 
     # 添加内容
+    sub_chapter_number = 1  # 子章节编号计数器
     for paragraph in content.split('\n'):
         if paragraph.strip():
             # 检查是否是标题（加粗或大字体）
@@ -69,13 +82,37 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
 
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-            run = p.add_run(paragraph.strip())
             
             if is_title:
-                run.bold = True
-                run.font.size = Pt(14)
-                run.font.name = "黑体"
+                # 添加子章节编号（如 "7.1"、"7.2" 等）
+                if chapter_number and not paragraph.strip().startswith(('一、', '二、', '三、', '四、', '五、', '六、', '七、', '八、', '九、', '十、', '十一、', '十二、', '十三、', '十四、', '十五、')):
+                    sub_chapter_title = f"{chapter_number}{sub_chapter_number} "
+                    run = p.add_run(sub_chapter_title)
+                    run.bold = True
+                    run.font.size = Pt(14)
+                    run.font.name = "黑体"
+                    
+                    # 添加实际标题内容（去掉中文数字前缀）
+                    actual_title = paragraph.strip()
+                    # 去掉中文数字前缀
+                    for cn_num in ['一、', '二、', '三、', '四、', '五、', '六、', '七、', '八、', '九、', '十、', '十一、', '十二、', '十三、', '十四、', '十五、']:
+                        if actual_title.startswith(cn_num):
+                            actual_title = actual_title[len(cn_num):]
+                            break
+                    run = p.add_run(actual_title)
+                    run.bold = True
+                    run.font.size = Pt(14)
+                    run.font.name = "黑体"
+                    
+                    sub_chapter_number += 1
+                else:
+                    # 没有主章节编号，直接添加标题
+                    run = p.add_run(paragraph.strip())
+                    run.bold = True
+                    run.font.size = Pt(14)
+                    run.font.name = "黑体"
             else:
+                run = p.add_run(paragraph.strip())
                 run.font.size = Pt(14)
                 run.font.name = "宋体"
 
