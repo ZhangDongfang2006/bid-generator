@@ -833,7 +833,7 @@ class BidDocumentGenerator:
 
         # 2.1 工艺质量
         p = doc.add_paragraph()
-        run = p.add_run("2.1 工艺质量")
+        run = p.add_run(f"{sub_chapter_prefix}1 工艺质量")
         run.bold = True
         run.font.size = Pt(14)
         run.font.name = "宋体"
@@ -853,7 +853,7 @@ class BidDocumentGenerator:
 
         # 2.2 技术特点
         p = doc.add_paragraph()
-        run = p.add_run("2.2 技术特点")
+        run = p.add_run(f"{sub_chapter_prefix}2 技术特点")
         run.bold = True
         run.font.size = Pt(14)
         run.font.name = "宋体"
@@ -876,7 +876,7 @@ class BidDocumentGenerator:
 
         # 2.3 主要元器件品牌
         p = doc.add_paragraph()
-        run = p.add_run("2.3 主要元器件品牌")
+        run = p.add_run(f"{sub_chapter_prefix}3 主要元器件品牌")
         run.bold = True
         run.font.size = Pt(14)
         run.font.name = "宋体"
