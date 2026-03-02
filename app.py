@@ -261,20 +261,20 @@ else:
                 help="增值税税率"
             )
 
-            # 法定代表人信息
+            # 投标办理人信息
             st.markdown("---")
-            st.markdown("### 👤 法定代表人信息")
-            
+            st.markdown("### 👤 投标办理人信息")
+
             rep_name = st.text_input(
-                "法定代表人姓名",
+                "投标办理人姓名",
                 value="阎海",
-                help="法定代表人姓名"
+                help="投标办理人姓名"
             )
 
             rep_title = st.text_input(
-                "法定代表人职务",
+                "投标办理人职务",
                 value="投标中心主任",
-                help="法定代表人职务"
+                help="投标办理人职务"
             )
 
             # 更新项目信息
@@ -449,8 +449,13 @@ else:
                     files = list(output_dir.glob("*.docx"))
 
                     if files:
-                        # 按修改时间排序，显示最新的2份文件（技术标和商务标）
-                        latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:2]
+                        # 根据生成模式显示文件
+                        if separate_bids:
+                            # 生成了技术标和商务标，显示最新的2份文件
+                            latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:2]
+                        else:
+                            # 生成单一投标文件，显示最新的1份文件
+                            latest_files = sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)[:1]
 
                         for file in latest_files:
                             with open(file, 'rb') as f:
