@@ -1744,6 +1744,11 @@ class BidDocumentGenerator:
             footer_para = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
             footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
+            # 按顺序添加页码内容：前缀、页码、后缀
+            # 添加前缀 "第 "
+            prefix_run = footer_para.add_run("第 ")
+            prefix_run.font.size = Pt(10)
+
             # 添加页码
             run = footer_para.add_run()
             run.font.size = Pt(10)
@@ -1763,9 +1768,9 @@ class BidDocumentGenerator:
             run._r.append(instrText)
             run._r.append(fldChar2)
 
-            # 添加页码前后缀
-            run._element.insertbefore(footer_para.add_run("第 ")._element, run._element[0])
-            run._element.append(footer_para.add_run(" 页")._element)
+            # 添加后缀 " 页"
+            suffix_run = footer_para.add_run(" 页")
+            suffix_run.font.size = Pt(10)
 
 
 # 测试代码
