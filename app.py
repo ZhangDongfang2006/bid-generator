@@ -17,6 +17,9 @@ from generator import BidDocumentGenerator as BidGenerator
 from database import CompanyDatabase
 import config
 
+# 导入清理脚本
+import cleanup_output
+
 
 # ==================== 配置 ====================
 
@@ -471,3 +474,62 @@ else:
                         st.info("暂无生成的文件")
             except Exception as e:
                 st.error(f"❌ 生成失败：{e}")
+
+        # 第四步：清理旧文件
+        st.markdown("---")
+        st.subheader("🧹 文件管理")
+
+        # 说明
+        st.info("💡 每次下载很多测试版本，建议每天清理一次，保留最新10份文件")
+
+        # 清理按钮
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            if st.button("🧹 清理旧文件", type="secondary", key="cleanup_files"):
+                try:
+                    # 导入清理脚本
+                    import cleanup_output
+
+                    # 执行清理
+                    cleanup_output.cleanup_output(output_dir="output", keep_count=10)
+                    st.success("✅ 清理完成！")
+                    st.info(f"保留了最新的 10 份文件")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"❌ 清理失败：{e}")
+
+        with col2:
+            if st.button("📊 查看文件统计", type="secondary", key="show_file_stats"):
+                try:
+                    # 统计 output 目录中的文件
+                    output_dir = Path("output")
+                    if output_dir.exists():
+                        files = list(output_dir.glob("*.docx"))
+                        archive_dir = output_dir / "archive"
+
+                        # 统计当前文件和归档文件
+                        current_count = len(files)
+                        archive_count = len(list(archive_dir.glob("*.docx"))) if archive_dir.exists() else 0
+
+                        # 计算大小
+                        current_size = sum(f.stat().st_size for f in files) / 1024 / 1024
+                        archive_size = sum(f.stat().st_size for f in list(archive_dir.glob("*.docx"))) / 1024 / 1024 if archive_dir.exists() else 0
+
+                        # 显示统计
+                        st.markdown("### 📊 文件统计")
+                        
+                        metrics_data = {
+                            "指标": ["当前文件", "归档文件", "总计"],
+                            "数量": [current_count, archive_count, current_count + archive_count],
+                            "大小": [f"{current_size:.2f}", f"{archive_size:.2f}", f"{current_size + archive_size:.2f}"]
+                        }
+                        
+                        st.dataframe(metrics_data, use_container_width=True, hide_index=True)
+                        
+                        st.markdown(f"**当前文件**: {current_count} 份 ({current_size:.2f} MB)")
+                        st.markdown(f"**归档文件**: {archive_count} 份 ({archive_size:.2f} MB)")
+                        st.markdown(f"**总计**: {current_count + archive_count} 份 ({current_size + archive_size:.2f} MB)")
+                except Exception as e:
+                    st.error(f"❌ 统计失败：{e}")
+
+        st.markdown("---")
