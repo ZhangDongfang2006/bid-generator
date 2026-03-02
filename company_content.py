@@ -85,51 +85,51 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
 def add_legal_authorization(doc: Document, bid_type: str = '单一文件'):
     """添加法定代表人授权书"""
     content = read_temp_file('legal_authorization.txt')
-    add_chapter_from_text(doc, "二、法定代表人授权书", content, bid_type)
+    add_chapter_from_text(doc, "法定代表人授权书", content, bid_type)
 
 
 def add_bid_guarantee(doc: Document, bid_type: str = '单一文件'):
     """添加投标保证金缴纳证明"""
     content = read_temp_file('bid_guarantee.txt')
-    add_chapter_from_text(doc, "三、投标保证金缴纳证明", content, bid_type)
+    add_chapter_from_text(doc, "投标保证金缴纳证明", content, bid_type)
 
 
 def add_warranty_commitment(doc: Document, bid_type: str = '单一文件'):
     """添加质保期满后三年内的备品备件供货承诺"""
     content = read_temp_file('warranty_commitment.txt')
-    add_chapter_from_text(doc, "六、质保期满后三年内的备品备件供货承诺", content, bid_type)
+    add_chapter_from_text(doc, "质保期满后三年内的备品备件供货承诺", content, bid_type)
 
 
 def add_compliance_statement(doc: Document, bid_type: str = '单一文件'):
     """添加近三年无重大违法记录声明"""
     content = read_temp_file('compliance_statement.txt')
-    add_chapter_from_text(doc, "九、近三年无重大违法记录声明", content, bid_type)
+    add_chapter_from_text(doc, "近三年无重大违法记录声明", content, bid_type)
 
 
 def add_quality_control_plan(doc: Document, bid_type: str = '单一文件'):
     """添加质量控制专项方案"""
     content = read_temp_file('quality_control_plan.txt')
-    
+
     # 质量控制方案内容较多，分多个子章节
-    add_chapter_from_text(doc, "十二、质量控制专项方案", content, bid_type)
+    add_chapter_from_text(doc, "质量控制专项方案", content, bid_type)
 
 
 def add_safety_guarantee(doc: Document, bid_type: str = '单一文件'):
     """添加安全保证"""
     content = read_temp_file('safety_guarantee.txt')
-    add_chapter_from_text(doc, "十三、安全保证", content, bid_type)
+    add_chapter_from_text(doc, "安全保证", content, bid_type)
 
 
 def add_delivery_plan(doc: Document, bid_type: str = '单一文件'):
     """添加供货组织及进度计划"""
     content = read_temp_file('delivery_plan.txt')
-    add_chapter_from_text(doc, "十四、供货组织及进度计划", content, bid_type)
+    add_chapter_from_text(doc, "供货组织及进度计划", content, bid_type)
 
 
 def add_training_and_service(doc: Document, bid_type: str = '单一文件'):
     """添加技术培训、售后服务"""
     content = read_temp_file('training_and_service.txt')
-    add_chapter_from_text(doc, "十五、技术培训、售后服务的内容、计划及措施", content, bid_type)
+    add_chapter_from_text(doc, "技术培训、售后服务", content, bid_type)
 
 
 if __name__ == "__main__":

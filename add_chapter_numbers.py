@@ -3,10 +3,9 @@
 为章节标题添加数字编号，让它们和目录一致
 """
 
-import json
-from pathlib import Path
+import re
 
-# 章节编号映射
+# 章节编号映射（注意：key 不包含中文数字前缀）
 chapter_numbers = {
     '单一文件': {
         '封面': '1.',
@@ -16,15 +15,15 @@ chapter_numbers = {
         '技术偏离表': '5.',
         '公司简介': '6.',
         '技术方案': '7.',
-        '二、法定代表人授权书': '8.',
-        '三、投标保证金缴纳证明': '9.',
-        '六、质保期满后三年内的备品备件供货承诺': '10.',
+        '法定代表人授权书': '8.',
+        '投标保证金缴纳证明': '9.',
+        '质保期满后三年内的备品备件供货承诺': '10.',
         '设备说明一览表': '11.',
-        '九、近三年无重大违法记录声明': '12.',
-        '十二、质量控制专项方案': '13.',
-        '十三、安全保证': '14.',
-        '十四、供货组织及进度计划': '15.',
-        '十五、技术培训、售后服务的内容、计划及措施': '16.',
+        '近三年无重大违法记录声明': '12.',
+        '质量控制专项方案': '13.',
+        '安全保证': '14.',
+        '供货组织及进度计划': '15.',
+        '技术培训、售后服务': '16.',
         '报价说明': '17.',
         '资质证书': '18.',
         '项目案例': '19.',
@@ -41,12 +40,12 @@ chapter_numbers = {
         '技术偏离表': '1.5',
         '公司简介': '1.6',
         '技术方案': '1.7',
-        '九、近三年无重大违法记录声明': '1.8',
-        '十二、质量控制专项方案': '1.9',
-        '十三、安全保证': '1.10',
+        '近三年无重大违法记录声明': '1.8',
+        '质量控制专项方案': '1.9',
+        '安全保证': '1.10',
         '设备说明一览表': '1.11',
-        '十四、供货组织及进度计划': '1.12',
-        '十五、技术培训、售后服务': '1.13',
+        '供货组织及进度计划': '1.12',
+        '技术培训、售后服务': '1.13',
         '资质证书': '1.14',
         '项目案例': '1.15',
         '技术承诺': '1.16',
@@ -67,8 +66,11 @@ chapter_numbers = {
     }
 }
 
+# 中文数字列表
+chinese_numbers = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五']
 
-def get_chapter_title(title: str, bid_type: str = '单一文件'):
+
+def get_chapter_title(title, bid_type='单一文件'):
     """
     获取带编号的章节标题
 
@@ -79,29 +81,26 @@ def get_chapter_title(title: str, bid_type: str = '单一文件'):
     Returns:
         带编号的章节标题
     """
-    import re
-
-    # 检查标题是否已包含阿拉伯数字编号（1. 或 2.）
+    # 检查标题是否已包含阿拉伯数字编号
     if re.match(r'^\d+\.\d*\s', title):
         return title
 
-    # 检查是否以中文数字开头（一、二、三、...）
-    chinese_number_pattern = r'^(一|二|三|四|五|六|七|八|九|十|十一|十二|十三|十四|十五)、'
-    match = re.match(chinese_number_pattern, title)
-    if match:
-        # 在章节编号映射中查找完整标题（包含中文数字前缀）
-        for key, number in chapter_numbers.get(bid_type, {}).items():
-            if title == key:  # 精确匹配
-                # 返回编号 + 标题（去掉中文数字前缀）
-                title_without_prefix = re.sub(chinese_number_pattern, '', title)
-                return f"{number} {title_without_prefix}"
-
-        # 如果没有找到匹配，返回原标题
-        return title
+    # 检查是否以中文数字开头（如 "二、法定代表人授权书"）
+    # 如果是，去掉中文数字前缀后再查找
+    for cn_num in chinese_numbers:
+        prefix = cn_num + '、'
+        if title.startswith(prefix):
+            title_without_prefix = title[len(prefix):]
+            # 在章节编号映射中查找（key 不包含中文数字前缀）
+            for key, number in chapter_numbers.get(bid_type, {}).items():
+                if title_without_prefix == key:
+                    return f"{number} {title_without_prefix}"
+            # 如果没有找到匹配，返回原标题
+            return title
 
     # 查找对应的编号（处理没有编号的标题）
     for key, number in chapter_numbers.get(bid_type, {}).items():
-        if title == key:  # 使用精确匹配
+        if title == key:
             return f"{number} {title}"
 
     # 如果没有找到编号，返回原标题
