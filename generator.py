@@ -822,8 +822,18 @@ class BidDocumentGenerator:
         """添加技术方案"""
         p = doc.add_paragraph()
         title = "技术方案"
+        
+        # 提取主章节编号（如 "7. 技术方案" → "7."）
+        import re
+        match = re.match(r'^(\d+\.)\s', title)
+        main_chapter_number = match.group(1) if match else ''
+        
+        # 为主章节编号作为子章节编号前缀
+        sub_chapter_prefix = f"{main_chapter_number}" if main_chapter_number else ''
+        
         if CHAPTER_NUMBERS_AVAILABLE:
             title = get_chapter_title(title, bid_type)
+        
         run = p.add_run(title)
         run.bold = True
         run.font.size = Pt(16)
