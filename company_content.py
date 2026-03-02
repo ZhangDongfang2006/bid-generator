@@ -47,6 +47,9 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
     match = re.match(r'^(\d+\.)\s', title)
     chapter_number = match.group(1) if match else ''
     
+    # ⚠️ 重要：每个主章节的子章节编号都从 1 开始
+    sub_chapter_number = 1  # 重置计数器，确保每个主章节的子章节编号都从 1 开始
+    
     # 添加章节标题
     p = doc.add_paragraph()
     run = p.add_run(title)
@@ -57,7 +60,6 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
     doc.add_paragraph()
 
     # 添加内容
-    sub_chapter_number = 1  # 子章节编号计数器
     for paragraph in content.split('\n'):
         if paragraph.strip():
             # 检查是否是标题（加粗或大字体）
@@ -104,7 +106,7 @@ def add_chapter_from_text(doc: Document, title: str, content: str, bid_type: str
                     run.font.size = Pt(14)
                     run.font.name = "黑体"
                     
-                    sub_chapter_number += 1
+                    sub_chapter_number += 1  # 递增计数器
                 else:
                     # 没有主章节编号，直接添加标题
                     run = p.add_run(paragraph.strip())
