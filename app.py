@@ -400,9 +400,8 @@ else:
         st.info("✅ 生成的投标文件中将自动包含证书图片")
         
         # 生成选项
-        # 生成选项
-        separate_bids = st.checkbox("技术标和商务标分开生成", value=True, key="separate_bids")
-        st.caption("勾选后，将生成两个独立的文件")
+        separate_bids = st.checkbox("技术标和商务标分开生成", value=False, key="separate_bids")
+        st.caption("勾选后，将生成技术标和商务标两个独立的文件")
 
         # 生成按钮
         if st.button("🚀 生成投标文件", type="primary", key="generate_bid"):
