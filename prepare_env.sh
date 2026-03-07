@@ -23,11 +23,10 @@ if command -v python3 &>/dev/null; then
     else
         echo "   ❌ Python 版本不满足要求 (需要 >= 3.8)"
         echo "   ⚠️  建议升级 Python 版本"
-    echo ""
+    fi
 else
     echo "   ❌ 未找到 Python3"
     echo "   ⚠️  请先安装 Python 3.8 或更高版本"
-    echo ""
 fi
 
 # 检查 pip
@@ -35,11 +34,9 @@ echo "📋 2. 检查 pip..."
 if command -v pip3 &>/dev/null; then
     PIP_VERSION=$(pip3 --version)
     echo "   ✅ pip 版本: $PIP_VERSION"
-    echo ""
 else
     echo "   ❌ 未找到 pip3"
     echo "   ⚠️  请先安装 pip3"
-    echo ""
 fi
 
 # 检查依赖
@@ -82,14 +79,14 @@ if [ ${#MISSING_DEPS[@]} -eq 0 ]; then
     echo ""
     echo "已安装的依赖 ($(( ${#INSTALLED_DEPS[@]} ))):"
     for dep in "${INSTALLED_DEPS[@]}"; do
-        echo "  • $dep"
+        echo " • $dep"
     done
 else
     echo "⚠️  缺少 $(( ${#MISSING_DEPS[@]} )) 个依赖"
     echo ""
     echo "缺失的依赖:"
     for dep in "${MISSING_DEPS[@]}"; do
-        echo "  • $dep"
+        echo " • $dep"
     done
     echo ""
     echo "📝 是否安装缺失的依赖？"
@@ -122,15 +119,14 @@ if [ "$install_deps" = "y" ] && [ ${#MISSING_DEPS[@]} -gt 0 ]; then
     echo ""
     echo "🚀 下一步：启动应用"
     echo "   命令: streamlit run app.py"
-    echo ""
 else
     echo "✅ 环境准备完成"
     echo ""
     echo "🚀 下一步：启动应用"
     echo "   命令: streamlit run app.py"
-    echo ""
 fi
 
+echo ""
 echo "============================================================"
 echo "环境准备完成"
 echo "============================================================"

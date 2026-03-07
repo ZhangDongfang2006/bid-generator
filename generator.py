@@ -818,6 +818,80 @@ class BidDocumentGenerator:
 
         doc.add_page_break()
 
+    def _insert_image(self, doc: Document, image_path, width=Inches(5.0), caption=None):
+        """
+        插入图片到文档
+
+        Args:
+            doc: Document 对象
+            image_path: 图片路径
+            width: 图片宽度（英寸）
+            caption: 图片说明（可选）
+        """
+        try:
+            # 插入图片
+            p = doc.add_paragraph()
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            run = p.add_run()
+            pic = run.add_picture(str(image_path), width=width)
+
+            # 添加说明
+            if caption:
+                caption_p = doc.add_paragraph(caption)
+                caption_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+            return True
+        except Exception as e:
+            print(f"✗ 插入图片失败 {image_path}: {e}")
+            return False
+
+    def _insert_images_from_directory(self, doc, directory, title=None, max_images=None, width=Inches(4.5)):
+        """
+        从目录插入所有图片
+
+        Args:
+            doc: Document 对象
+            directory: 图片目录
+            title: 章节标题
+            max_images: 最多插入的图片数量
+            width: 图片宽度
+        """
+        if not directory.exists():
+            print(f"✗ 目录不存在: {directory}")
+            return
+
+        # 获取所有图片文件
+        image_files = sorted([f for ext in ["*.jpg", "*.jpeg", "*.png"] for f in directory.glob(ext) if f.is_file() and not f.name.startswith("README")])
+
+        if not image_files:
+            print(f"✗ 目录中没有图片: {directory}")
+            return
+
+        # 添加章节标题
+        if title:
+            doc.add_paragraph()
+            p = doc.add_paragraph()
+            run = p.add_run(title)
+            run.bold = True
+            run.font.size = Pt(14)
+            run.font.name = "宋体"
+            doc.add_paragraph()
+
+        # 插入图片
+        count = 0
+        for img_path in image_files:
+            if max_images and count >= max_images:
+                break
+
+            # 获取图片文件名作为说明
+            caption = img_path.stem  # 不包括扩展名
+
+            if self._insert_image(doc, img_path, width=width, caption=caption):
+                count += 1
+                doc.add_paragraph()
+
+        print(f"✓ 从 {directory.name} 插入了 {count} 张图片")
+
     def _add_tech_solution(self, doc: Document, tender_info: Dict, matched_data: Dict, bid_type: str = "单一文件"):
         """添加技术方案"""
         p = doc.add_paragraph()
@@ -905,6 +979,28 @@ class BidDocumentGenerator:
 
         for brand in brands:
             doc.add_paragraph(brand)
+
+        # 插入产品图片
+        products_dir = self.templates_dir.parent / "data" / "images" / "products"
+        if products_dir.exists():
+            self._insert_images_from_directory(
+                doc,
+                products_dir,
+                title=f"{sub_chapter_prefix}4 产品展示",
+                max_images=5,
+                width=Inches(4.5)
+            )
+
+        # 插入工艺流程图
+        charts_dir = self.templates_dir.parent / "data" / "images" / "charts"
+        if charts_dir.exists():
+            self._insert_images_from_directory(
+                doc,
+                charts_dir,
+                title=f"{sub_chapter_prefix}5 工艺流程图",
+                max_images=None,
+                width=Inches(5.5)
+            )
 
         doc.add_page_break()
 
@@ -1458,6 +1554,17 @@ class BidDocumentGenerator:
             row_cells[3].text = case.get("industry", "")
             row_cells[4].text = case.get("product_type", "")
             row_cells[5].text = str(case.get("amount", 0) / 10000)
+
+        # 插入工程照片
+        projects_dir = self.templates_dir.parent / "data" / "images" / "projects"
+        if projects_dir.exists():
+            self._insert_images_from_directory(
+                doc,
+                projects_dir,
+                title="工程业绩照片",
+                max_images=5,
+                width=Inches(5.0)
+            )
 
         doc.add_page_break()
 
