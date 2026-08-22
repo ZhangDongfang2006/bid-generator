@@ -1,5 +1,7 @@
 # XX公司电气 - 投标文件自动生成系统
 
+> ⚠️ **Deprecated / 已弃用**：本项目为早期实验性工具，功能不完善、实用性有限，已于开发阶段停止维护，从未投入正式使用。仅作技术演示存档，代码质量不作保证，请勿用于生产环境。如有兴趣欢迎 Fork 自行改进。
+
 > 基于AI的智能投标文件生成工具
 
 [![GitHub Stars](https://img.shields.io/badge/Stars-yellow?style=flat-square)](https://github.com/ZhangDongfang2006/bid-generator)
