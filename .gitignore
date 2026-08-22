@@ -57,3 +57,4 @@ data/
 
 # 示例数据（已提交到 Git，用于演示）
 !data/examples/
+backup*
