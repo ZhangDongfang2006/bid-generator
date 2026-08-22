@@ -209,11 +209,11 @@ class BidDocumentGenerator:
         
         content = f"""法定代表人身份证明
 
-本人{self.company_info['legal_rep']}（姓名：{self.company_info['legal_rep']}，身份证号：{self.personnel.get('legal_rep_id_card', '（待填写）'}），系{self.company_info['company_name']}的法定代表人。
+本人{self.company_info['legal_rep']}（姓名：{self.company_info['legal_rep']}，身份证号：{self.personnel.get('legal_rep_id_card', '（待填写）')}），系{self.company_info['company_name']}的法定代表人。
 
 特此证明。
 
-投标单位：{self.company_info_company_name']}
+投标单位：{self.company_info['company_name']}
 （盖章）
 法定代表人：（签字）
 日  期：{datetime.now().strftime('%Y年%m月%d日')}
@@ -243,7 +243,7 @@ class BidDocumentGenerator:
         # 授权委托书内容
         content = f"""法定代表人授权委托书
 
-本授权委托书声明：我，{self.company_info['legal_rep']}，系{self.company_info['company_name']}的法定代表人，现授权{self.personnel.get('authorized_rep', '（待填写）'}（姓名：{self.personnel.get('authorized_rep', '（待填写）'}，职务：{self.personnel.get('authorized_rep_title', '（待填写）'}）为我方的合法代理人，就贵方组织{self.company_info['company_name']}参加"汉西污水处理厂三期工程电气设备（低压开关柜、动力配电箱等）采购及伴随服务"项目投标、谈判、签约等事宜，以我方名义全权处理。
+本授权委托书声明：我，{self.company_info['legal_rep']}，系{self.company_info['company_name']}的法定代表人，现授权{self.personnel.get('authorized_rep', '（待填写）')}（姓名：{self.personnel.get('authorized_rep', '（待填写）')}，职务：{self.personnel.get('authorized_rep_title', '（待填写）')}）为我方的合法代理人，就贵方组织{self.company_info['company_name']}参加"汉西污水处理厂三期工程电气设备（低压开关柜、动力配电箱等）采购及伴随服务"项目投标、谈判、签约等事宜，以我方名义全权处理。
 
 委托期限：自本授权委托书签发之日起至本项目投标结束止。
 
@@ -450,7 +450,7 @@ class BidDocumentGenerator:
         
         # 添加项目纲领图片
         other_images = self.get_images_from_dir('others')
-       纲领_images = [img for img in other_images if '纲领' in img.name]
+        纲领_images = [img for img in other_images if '纲领' in img.name]
         
         for img_path in 纲领_images[:2]:
             self.add_image(img_path)
