@@ -27,7 +27,7 @@ class BidDocumentGenerator:
         except Exception as e:
             print("加载配置失败，使用默认配置")
             self.company_info = {
-                'company_name': '海越(湖北)电气股份有限公司',
+                'company_name': 'XX电气股份有限公司',
                 'legal_rep': '',
                 'phone': '',
                 'email': '',

@@ -16,7 +16,7 @@ def load_json(filepath):
 
 def main():
     print("=" * 80)
-    print("海越湖北电气投标生成系统 - 数据库统计")
+    print("XX公司电气投标生成系统 - 数据库统计")
     print("=" * 80)
     print()
 

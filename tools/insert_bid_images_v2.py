@@ -12,7 +12,7 @@ from docx.oxml.ns import qn
 import fitz  # PyMuPDF
 
 BASE = Path("/Users/zhangdongfang/.openclaw/workspace-company/公司资质")
-QUAL_PKG = BASE / "海越资质文件素材包"
+QUAL_PKG = BASE / "XX资质文件素材包"
 HONOR_PKG = QUAL_PKG / "02、企业资质荣誉篇"
 PRODUCT_PKG = QUAL_PKG / "03、产品展示篇"
 DOCX_PATH = Path("/Users/zhangdongfang/.openclaw/workspace-notebooklm/合浦矿业箱变项目_投标文件.docx")
@@ -128,7 +128,7 @@ for label, fname in box_inspections:
 
 # 型式试验证书
 type_certs = [
-    ("SIVACON_CB认证", "02、海越8PT CB认证证书.pdf"),
+    ("SIVACON_CB认证", "02、XX8PT CB认证证书.pdf"),
 ]
 for label, fname in type_certs:
     f = TYPE_CERT / fname

@@ -686,7 +686,7 @@ class BidDocumentGenerator:
         doc.add_paragraph()
 
         # 法人证明
-        doc.add_paragraph(f"兹证明海越（湖北）电气股份有限公司（统一社会信用代码：{company_info.get('credit_code', '91420100329990389G')}）是依法设立的企业，具有独立法人资格。")
+        doc.add_paragraph(f"兹证明XX（湖北）电气股份有限公司（统一社会信用代码：{company_info.get('credit_code', '91420100329990389G')}）是依法设立的企业，具有独立法人资格。")
 
         # 公司基本情况
         doc.add_paragraph("公司基本情况：")
@@ -713,7 +713,7 @@ class BidDocumentGenerator:
         doc.add_paragraph()
 
         # 公司理念
-        doc.add_paragraph(f"海越（湖北）电气股份有限公司是一家专注于高低压成套配电设备研发、制造、销售和服务的高新技术企业。公司始终坚持'质量第一、客户至上'的经营理念，致力于为客户提供优质的产品和完善的服务。")
+        doc.add_paragraph(f"XX（湖北）电气股份有限公司是一家专注于高低压成套配电设备研发、制造、销售和服务的高新技术企业。公司始终坚持'质量第一、客户至上'的经营理念，致力于为客户提供优质的产品和完善的服务。")
 
         doc.add_paragraph()
 
@@ -787,7 +787,7 @@ class BidDocumentGenerator:
         doc.add_paragraph()
 
         # 公司介绍
-        doc.add_paragraph("海越（湖北）电气股份有限公司是一家专注于高低压成套配电设备研发、制造、销售和服务的高新技术企业。")
+        doc.add_paragraph("XX（湖北）电气股份有限公司是一家专注于高低压成套配电设备研发、制造、销售和服务的高新技术企业。")
         doc.add_paragraph()
 
         doc.add_paragraph("公司拥有两大生产基地，分别位于湖北孝感和浙江宁波，占地面积约50000平方米，建筑面积约35000平方米。")

@@ -25,7 +25,7 @@ import cleanup_output
 
 # 页面设置
 st.set_page_config(
-    page_title="海越（湖北）电气 - 智能投标文件生成系统",
+    page_title="XX（湖北）电气 - 智能投标文件生成系统",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -90,7 +90,7 @@ if 'active_page' not in st.session_state:
 
 # 侧边栏
 with st.sidebar:
-    st.header("🏢 海越投标助手")
+    st.header("🏢 XX投标助手")
     st.divider()
     
     # 资料管理入口

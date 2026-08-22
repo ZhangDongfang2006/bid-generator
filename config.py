@@ -20,14 +20,14 @@ for dir_path in [DATA_DIR, TEMPLATES_DIR, UPLOADS_DIR, OUTPUT_DIR]:
 
 # 公司基本信息
 COMPANY_INFO = {
-    "name": "海越（湖北）电气股份有限公司",
-    "name_en": "Haiyue (Hubei) Electric Co., Ltd.",
+    "name": "XX（湖北）电气股份有限公司",
+    "name_en": "xx (Hubei) Electric Co., Ltd.",
     "address": "湖北省孝感市孝昌县经济开发区华阳大道188-1号",
     "postal_code": "432999",
-    "email": "info@nbhaiyue.com",
+    "email": "info@nbxx.com",
     "phone": "+86-0712-8303818",
     "fax": "86-0712-8303818",
-    "website": "www.haiyueelec.com",
+    "website": "www.xxelec.com",
     "service_hotline": "400-882-9910",
     "business_contact": "阎海",
     "business_phone": "13586872525",

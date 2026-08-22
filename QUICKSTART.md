@@ -240,9 +240,9 @@ A: 请查看项目目录下的 `用户使用手册.md` 文件，包含完整的�
 
 ## 联系支持
 
-- 📧 邮箱：gl@haiyueelec.com
+- 📧 邮箱：gl@xxelec.com
 - 📞 电话：0712-8303989
-- 🌐 网址：www.haiyueelec.com
+- 🌐 网址：www.xxelec.com
 
 ---
 
